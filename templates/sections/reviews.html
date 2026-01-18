@@ -1,0 +1,914 @@
+{% load static %}
+
+{% if messages %}
+<div id="notification-container" style="position: fixed; top: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 12px; width: 350px;">
+    {% for message in messages %}
+    <div class="notification-card {{ message.tags }}" style="
+        background: rgba(23, 23, 26, 0.85); 
+        backdrop-filter: blur(14px); 
+        -webkit-backdrop-filter: blur(14px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 20px;
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        position: relative;
+        overflow: hidden;
+        animation: slideInNotification 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    ">
+        <div style="
+            width: 44px; 
+            height: 44px; 
+            background: rgba(168, 85, 247, 0.15); 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            flex-shrink: 0;
+        ">
+            <i class="fas {% if message.tags == 'success' %}fa-check{% else %}fa-exclamation{% endif %}" 
+               style="color: #a855f7; font-size: 1.1rem;"></i>
+        </div>
+
+        <div style="flex: 1;">
+            <div style="color: white; font-weight: 700; font-size: 0.95rem; margin-bottom: 2px; letter-spacing: 0.3px;">
+                {% if message.tags == 'success' %}Success Update{% else %}System Notice{% endif %}
+            </div>
+            <div style="color: rgba(255,255,255,0.6); font-size: 0.8rem; line-height: 1.4;">
+                {{ message }}
+            </div>
+        </div>
+
+        <div style="width: 8px; height: 8px; background: #a855f7; border-radius: 50%; align-self: flex-start; margin-top: 4px; box-shadow: 0 0 10px rgba(168, 85, 247, 0.8);"></div>
+
+        <div class="progress-bar" style="
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(to right, transparent, #a855f7);
+            width: 100%;
+            animation: progressTimer 4s linear forwards;
+        "></div>
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+@keyframes slideInNotification {
+    from { transform: translateX(120%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes progressTimer {
+    from { width: 100%; }
+    to { width: 0%; }
+}
+
+@keyframes fadeOutNotification {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0; transform: scale(0.95); visibility: hidden; }
+}
+</style>
+
+<script>
+    // Автоматическое удаление через 4 секунды
+    setTimeout(() => {
+        const notifications = document.querySelectorAll('.notification-card');
+        notifications.forEach(n => {
+            n.style.animation = 'fadeOutNotification 0.5s ease forwards';
+            setTimeout(() => n.remove(), 500);
+        });
+    }, 4000);
+</script>
+{% endif %}
+
+<section id="reviews-section" class="fg-reviews-container">
+    <div class="fg-wrapper">
+        <div class="reviews-header">
+            <div class="header-content animate-init">
+                <div class="badge-modern">Community Elite</div>
+                <h2 class="ultra-heading">Voices of the <span>Dynasty</span></h2>
+                <div class="rating-summary">
+                    <span class="score">4.9</span>
+                    <div class="mini-stars">★★★★★</div>
+                    <span class="count">({{ reviews.count }} Verified Reviews)</span>
+                </div>
+            </div>
+            <div class="magnetic-wrap">
+                <button class="write-review-btn magnetic-item" id="openReviewForm">
+                    <span>Leave your mark</span>
+                    <span class="icon-plus">+</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="reviews-grid">
+            {% for review in reviews %}
+            <div class="review-card-premium animate-card">
+                <div class="card-shine"></div>
+                <div class="card-inner">
+                    <div class="u-header">
+                        <div class="u-info">
+                            <div class="u-avatar-wrap">
+                                <img src="https://ui-avatars.com/api/?name={{ review.name|urlencode }}&background=a855f7&color=fff" alt="{{ review.name }}">
+                                {% if review.is_verified %}
+                                <div class="u-verified">✓</div>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <span class="u-name">{{ review.name }}</span>
+                                <span class="u-role">{{ review.role }}</span>
+                            </div>
+                        </div>
+                        <div class="u-rating-pill">{{ review.rating }}.0</div>
+                    </div>
+                    <p class="u-quote">"{{ review.text }}"</p>
+                    <div class="u-footer-meta">
+                        <span>Verified Achievement</span>
+                        <span class="u-time">{{ review.created_at|timesince }} ago</span>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div style="grid-column: 1/-1; text-align: center; padding: 50px; color: var(--fg-text-muted);">
+                <p>No reviews yet. Be the first to join the Dynasty!</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="modal-overlay" id="reviewFormWrapper">
+            <div class="modal-window">
+                <div class="modal-header">
+                    <div class="modal-title-wrap">
+                        <h4>New Feedback</h4>
+                        <p style="color: var(--fg-text-muted); font-size: 14px; margin-top: 4px;">Your insight fuels the Dynasty</p>
+                    </div>
+                    <button class="close-modal" id="closeReviewForm" type="button">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                </div>
+
+                <form method="POST" action="{% url 'reviews' %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="star-rating-system">
+                            <input type="radio" name="rating" id="r5" value="5" required><label for="r5">★</label>
+                            <input type="radio" name="rating" id="r4" value="4"><label for="r4">★</label>
+                            <input type="radio" name="rating" id="r3" value="3"><label for="r3">★</label>
+                            <input type="radio" name="rating" id="r2" value="2"><label for="r2">★</label>
+                            <input type="radio" name="rating" id="r1" value="1"><label for="r1">★</label>
+                        </div>
+                        <textarea name="text" placeholder="Tell the Dynasty about your journey..." id="reviewTextArea" required></textarea>
+                        <button type="submit" class="submit-action-btn">Publish to Feed</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+/* --- CORE & UTILITIES --- */
+html { scroll-behavior: smooth; }
+
+/* TOAST NOTIFICATION STYLES */
+.toast-notification {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    background: var(--fg-card);
+    border: 1px solid var(--fg-accent);
+    padding: 20px 30px;
+    border-radius: 20px;
+    z-index: 9999;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    min-width: 320px;
+}
+
+.toast-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.toast-icon {
+    background: var(--fg-accent);
+    color: white;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.toast-content p {
+    margin: 0;
+    font-weight: 600;
+    color: var(--fg-text);
+}
+
+.toast-progress {
+    height: 3px;
+    background: var(--fg-accent);
+    width: 100%;
+    border-radius: 10px;
+    animation: progress-load 4s linear forwards;
+}
+
+.animate-toast {
+    animation: slide-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards,
+               fade-out 0.5s 4s forwards;
+}
+
+@keyframes slide-in { from { transform: translateX(120%); } to { transform: translateX(0); } }
+@keyframes fade-out { from { opacity: 1; } to { opacity: 0; visibility: hidden; } }
+@keyframes progress-load { from { width: 100%; } to { width: 0%; } }
+
+/* --- SECTION STYLES --- */
+.fg-reviews-container {
+    padding: 100px 0;
+    color: var(--fg-text);
+    font-family: 'Inter', sans-serif;
+    
+    /* Улучшенный фон с эффектом глубины */
+    background: var(--fg-bg);
+    background-image: 
+        radial-gradient(circle at 20% 30%, rgba(168, 85, 247, 0.03) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(124, 58, 237, 0.03) 0%, transparent 40%);
+    position: relative;
+}
+
+.reviews-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 60px;
+    gap: 30px;
+    flex-wrap: wrap; /* Чтобы на средних экранах кнопка не вылетала */
+}
+
+.header-content {
+    flex: 1;
+    min-width: 300px;
+}
+
+.badge-modern {
+    display: inline-block;
+    padding: 8px 16px;
+    background: rgba(168, 85, 247, 0.1);
+    color: var(--fg-accent);
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.ultra-heading {
+    font-size: clamp(32px, 5vw, 64px);
+    font-weight: 900;
+    margin: 20px 0;
+    line-height: 1;
+}
+
+.ultra-heading span {
+    background: linear-gradient(90deg, var(--fg-accent), #fff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.rating-summary { display: flex; align-items: center; gap: 15px; }
+.score { font-size: 24px; font-weight: 900; }
+.mini-stars { color: #ffb800; letter-spacing: 2px; }
+.count { color: var(--fg-text-muted); font-size: 14px; }
+
+.magnetic-wrap { display: inline-block; transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1); }
+
+
+
+/* --- ФИНАЛЬНЫЙ АДАПТИВНЫЙ ТЮНИНГ КНОПКИ --- */
+.write-review-btn {
+    position: relative;
+    background: var(--fg-text);
+    color: var(--fg-bg);
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    padding: 18px 35px;
+    border-radius: 20px;
+    font-weight: 800;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    z-index: 1;
+}
+
+/* Бегущий градиент при наведении */
+.write-review-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2), 
+        var(--fg-accent),
+        rgba(255, 255, 255, 0.2),
+        transparent
+    );
+    background-size: 200% 100%;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: -1;
+}
+
+.write-review-btn span {
+    position: relative;
+    z-index: 2;
+    pointer-events: none;
+    transition: color 0.4s ease; /* ДОБАВЛЕНО для плавности смены цвета текста */
+}
+
+/* Эффекты при наведении */
+.write-review-btn:hover {
+    transform: scale(1.05);
+    border-color: var(--fg-accent);
+    
+    /* ИСПРАВЛЕНО: Теперь текст становится фиолетовым (акцентным), как и было задумано */
+    color: var(--fg-accent); 
+    
+    /* ИСПРАВЛЕНО: Меняем фон на темный (bg) темы, чтобы фиолетовый текст хорошо читался */
+    background: var(--fg-bg); 
+    
+    box-shadow: 0 10px 30px rgba(168, 85, 247, 0.4);
+}
+
+.write-review-btn:hover::before {
+    opacity: 0.6; /* Сделал чуть прозрачнее, чтобы не перекрывал цвет текста */
+    animation: gradient-flow 2s linear infinite;
+}
+
+/* Иконка плюса */
+.icon-plus {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: rgba(168, 85, 247, 0.1); /* ИСПРАВЛЕНО: Используем переменную акцента */
+    border-radius: 8px;
+    font-size: 20px;
+    transition: all 0.4s ease;
+}
+
+.write-review-btn:hover .icon-plus {
+    /* ИСПРАВЛЕНО: Теперь плюс заливается фиолетовым, а сам символ становится белым */
+    background: var(--fg-accent);
+    color: #ffffff; 
+    
+    transform: rotate(90deg);
+    box-shadow: 0 0 15px var(--fg-accent);
+}
+
+/* Эффект нажатия */
+.write-review-btn:active {
+    transform: scale(0.95);
+}
+
+@keyframes gradient-flow {
+    0% { background-position: 100% 0%; }
+    100% { background-position: -100% 0%; }
+}
+
+/* --- ГОРЗИНТАЛЬНЫЙ СКРОЛЛ --- */
+.reviews-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 30px;
+    padding: 20px 5px 60px 5px; /* Отступы для теней карточек */
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+    cursor: grab;
+}
+
+.reviews-grid::-webkit-scrollbar { display: none; }
+.reviews-grid:active { cursor: grabbing; }
+
+.reviews-grid::-webkit-scrollbar {
+    display: none;
+}
+
+/* БАЗОВОЕ СОСТОЯНИЕ КАРТОЧКИ */
+/* --- ИСПРАВЛЕННЫЙ HEADER ДЛЯ ПК --- */
+.reviews-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end; /* Оставляем выравнивание по низу */
+    margin-bottom: 80px;
+    gap: 40px; /* Добавляем отступ, чтобы элементы не слипались */
+    flex-wrap: wrap; /* Позволяет кнопке упасть вниз, если места мало */
+}
+
+.header-content {
+    flex: 1; /* Позволяет заголовку занимать свободное место */
+    min-width: 300px; /* Чтобы не сжимался слишком сильно */
+}
+
+/* --- ИСПРАВЛЕННАЯ СЕТКА (GRID) --- */
+.reviews-grid {
+    cursor: grab;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 30px;
+    padding: 20px 0 60px 0; /* Убрали боковые паддинги, если они ломают центровку wrapper */
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    
+    /* Добавляем плавность скролла пальцем/мышкой */
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ОГРАНИЧЕНИЕ ШИРИНЫ КАРТОЧКИ НА ПК */
+.review-card-premium {
+    position: relative;
+    background: var(--fg-card);
+    border: 1px solid var(--fg-border);
+    border-radius: 40px; /* Оптимально для ПК */
+    padding: 40px;
+    flex: 0 0 420px; /* Фиксированная ширина на ПК */
+    max-width: 90vw;
+    scroll-snap-align: start; /* Прилипание по левому краю для аккуратности */
+    
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+/* СОСТОЯНИЕ: ПОЯВИЛАСЬ (через JS IntersectionObserver) */
+.review-card-premium.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.review-card-premium:hover {
+    border-color: var(--fg-accent);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    transform: translateY(-10px);
+}
+
+/* ЭФФЕКТ БЛИКА (SHINE) */
+.card-shine {
+    position: absolute; 
+    inset: 0;
+    background: radial-gradient(
+        circle at var(--mouse-x) var(--mouse-y), 
+        rgba(168, 85, 247, 0.15) 0%, 
+        transparent 60%
+    );
+    opacity: 0; 
+    transition: opacity 0.3s ease; 
+    pointer-events: none; 
+    z-index: 1;
+}
+
+/* Показываем блик только при наведении на видимую карточку */
+.review-card-premium.is-visible:hover .card-shine {
+    opacity: 1;
+}
+
+.u-header { 
+    position: relative; 
+    z-index: 2; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; /* Центрируем по вертикали для лучшего вида */
+    margin-bottom: 35px; 
+}
+
+.u-info { display: flex; gap: 20px; align-items: center; }
+
+.u-avatar-wrap { 
+    position: relative; 
+    width: 64px; 
+    height: 64px; 
+    flex-shrink: 0; /* Чтобы фото не сплющивалось */
+}
+
+.u-avatar-wrap img { 
+    width: 100%; 
+    height: 100%; 
+    border-radius: 22px; 
+    object-fit: cover; 
+    border: 1px solid var(--fg-border); /* Легкий контур для фото */
+}
+
+.u-verified {
+    position: absolute; bottom: -4px; right: -4px;
+    background: var(--fg-accent); 
+    width: 20px; height: 20px;
+    border-radius: 50%; 
+    border: 2px solid var(--fg-card);
+    color: white; 
+    font-size: 9px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.u-name { font-weight: 800; font-size: 18px; display: block; letter-spacing: -0.5px; }
+.u-role { font-size: 11px; color: var(--fg-accent); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+
+.u-rating-pill {
+    background: var(--fg-text); 
+    color: var(--fg-bg);
+    padding: 6px 14px; 
+    border-radius: 12px; 
+    font-weight: 900;
+    font-size: 14px;
+    transition: transform 0.3s ease;
+}
+
+/* Эффект для рейтинга при наведении на карточку */
+.review-card-premium:hover .u-rating-pill {
+    transform: scale(1.1);
+    background: var(--fg-accent);
+    color: #fff;
+}
+
+.u-quote {
+    position: relative; 
+    z-index: 2;
+    font-size: 17px; /* Чуть уменьшил для лучшей читаемости */
+    line-height: 1.6; 
+    color: var(--fg-text-muted);
+    font-style: italic; 
+    margin-bottom: 35px;
+    display: -webkit-box;
+    -webkit-line-clamp: 5; /* Ограничение в 5 строк, чтобы карточки были одной высоты */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.u-footer-meta {
+    position: relative; 
+    z-index: 2;
+    display: flex; 
+    justify-content: space-between;
+    border-top: 1px solid var(--fg-border); 
+    padding-top: 25px;
+    font-size: 12px; 
+    color: var(--fg-text-muted); 
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* MODAL STYLES — ОПТИМИЗИРОВАНО */
+.modal-overlay {
+    position: fixed; 
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7); /* Чуть темнее для фокуса на форме */
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px); /* Поддержка Safari */
+    z-index: 1000; 
+    opacity: 0; 
+    visibility: hidden;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+    padding: 20px;
+}
+
+/* Состояние при открытии */
+.modal-overlay.is-open { 
+    opacity: 1; 
+    visibility: visible; 
+}
+
+.modal-window {
+    background: var(--fg-card); 
+    border: 1px solid var(--fg-border);
+    width: 100%; 
+    max-width: 550px; 
+    border-radius: 40px; 
+    padding: 50px;
+    position: relative;
+    
+    /* Начальное состояние: смещено вниз и уменьшено */
+    transform: translateY(40px) scale(0.95); 
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    
+    /* Тень окна для глубины */
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+}
+
+/* Анимация окна внутри открытого оверлея */
+.modal-overlay.is-open .modal-window { 
+    transform: translateY(0) scale(1); 
+}
+
+.modal-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; /* Центрируем заголовок и кнопку X по одной линии */
+    margin-bottom: 35px; 
+}
+
+/* Улучшение для мобильных устройств */
+@media (max-width: 550px) {
+    .modal-window {
+        padding: 30px 20px;
+        border-radius: 30px;
+    }
+}
+/* --- ТЮНИНГ КНОПКИ ЗАКРЫТИЯ (X) --- */
+.close-modal {
+    position: relative;
+    background: rgba(255, 255, 255, 0.03); /* Почти прозрачный фон */
+    border: 1px solid var(--fg-border);
+    color: var(--fg-text-muted);
+    width: 48px;
+    height: 48px;
+    border-radius: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow: hidden;
+    z-index: 10;
+}
+
+/* Иконка внутри кнопки */
+.close-modal svg {
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), stroke 0.3s ease;
+}
+
+/* ЭФФЕКТЫ ПРИ НАВЕДЕНИИ */
+.close-modal:hover {
+    background: var(--fg-bg); /* Темный фон темы */
+    border-color: #a153ed;    /* Цвет ошибки/закрытия (красный) или var(--fg-accent) */
+    color: #a153ed;           /* Иконка становится красной */
+    transform: rotate(90deg) scale(1.1); /* Поворот и легкое увеличение */
+    box-shadow: 0 0 20px rgba(125, 68, 239, 0.3); /* Красное неоновое свечение */
+}
+
+/* Эффект при наведении на саму иконку */
+.close-modal:hover svg {
+    transform: rotate(-90deg); /* Контр-вращение для крутого визуального эффекта */
+    stroke: #a153ed;
+}
+
+/* Эффект пульсации (подсказка, что можно закрыть) */
+.close-modal::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 2px solid #a153ed;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.4s ease;
+}
+
+.close-modal:hover::after {
+    opacity: 0.2;
+    transform: scale(1.2);
+}
+
+/* Эффект нажатия */
+.close-modal:active {
+    transform: scale(0.9) rotate(90deg);
+}
+
+.star-rating-system { 
+    display: flex; 
+    flex-direction: row-reverse; 
+    justify-content: center; 
+    gap: 12px; 
+    margin: 30px 0; 
+}
+
+.star-rating-system input { display: none; }
+
+.star-rating-system label { 
+    font-size: 45px; 
+    color: var(--fg-border); 
+    cursor: pointer; 
+    /* Добавляем плавность перехода */
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); 
+}
+
+/* Эффекты при наведении и выборе (Hover & Checked) */
+.star-rating-system label:hover, 
+.star-rating-system label:hover ~ label, 
+.star-rating-system input:checked ~ label { 
+    color: var(--fg-accent); 
+    /* Добавляем мягкое свечение в стиле Dynasty */
+    text-shadow: 0 0 20px rgba(168, 85, 247, 0.5); 
+    /* Легкое увеличение выбранной звезды */
+    transform: scale(1.15); 
+}
+
+/* Небольшой отклик при самом нажатии */
+.star-rating-system label:active {
+    transform: scale(0.9);
+}
+.modal-body textarea {
+    width: 100%; height: 160px; background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--fg-border); border-radius: 24px; padding: 25px;
+    color: white; margin-bottom: 30px; resize: none; font-size: 16px; outline: none;
+}
+
+.modal-body textarea:focus { border-color: var(--fg-accent); }
+
+/* --- СТИЛИЗАЦИЯ КНОПКИ ОТПРАВКИ (SUBMIT) --- */
+.submit-action-btn {
+    position: relative;
+    width: 100%;           /* Сохраняем размер на всю ширину модалки */
+    padding: 22px;
+    background: var(--fg-text); 
+    color: var(--fg-bg);
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    border-radius: 20px;
+    font-weight: 800;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    z-index: 1;
+}
+
+/* Бегущий градиент */
+.submit-action-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.2), 
+        var(--fg-accent), 
+        rgba(255, 255, 255, 0.2), 
+        transparent
+    );
+    background-size: 200% 100%;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: -1;
+}
+
+/* Эффекты при наведении */
+.submit-action-btn:hover {
+    transform: translateY(-3px); /* Легкий подъем вместо увеличения */
+    border-color: var(--fg-accent);
+    color: var(--fg-accent);     /* Тот же цвет, что и у кнопки открытия */
+    background: var(--fg-bg);    /* Переключаем фон для контраста текста */
+    box-shadow: 0 15px 30px rgba(168, 85, 247, 0.3);
+}
+
+.submit-action-btn:hover::before {
+    opacity: 0.6;
+    animation: gradient-flow 2s linear infinite;
+}
+
+/* Эффект нажатия */
+.submit-action-btn:active {
+    transform: scale(0.98);
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+    .review-card-premium {
+        flex: 0 0 85vw;
+        padding: 30px;
+        border-radius: 32px;
+    }
+    .reviews-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+
+    .ultra-heading { font-size: 38px; }
+}
+
+/* Планшеты и малые ПК */
+@media (max-width: 1100px) {
+    .review-card-premium { flex: 0 0 380px; }
+}
+
+
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const cards = document.querySelectorAll('.review-card-premium');
+    const magneticBtn = document.querySelector('.magnetic-item');
+    const overlay = document.getElementById('reviewFormWrapper');
+    const openBtn = document.getElementById('openReviewForm');
+    const closeBtn = document.getElementById('closeReviewForm');
+    const slider = document.querySelector('.reviews-grid');
+
+    // 1. Эффект блика (Shine)
+    document.addEventListener('mousemove', e => {
+        cards.forEach(card => {
+            const rect = card.getBoundingClientRect();
+            card.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
+            card.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
+        });
+    });
+
+    // 2. Магнитная кнопка
+    if (magneticBtn) {
+        magneticBtn.addEventListener('mousemove', (e) => {
+            const rect = magneticBtn.getBoundingClientRect();
+            const x = (e.clientX - rect.left - rect.width / 2) * 0.3;
+            const y = (e.clientY - rect.top - rect.height / 2) * 0.3;
+            magneticBtn.style.transform = `translate(${x}px, ${y}px)`;
+        });
+        magneticBtn.addEventListener('mouseleave', () => {
+            magneticBtn.style.transform = `translate(0, 0)`;
+        });
+    }
+
+    // 3. Анимация появления карточек в ряду
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+            }
+        });
+    }, { threshold: 0.1 });
+    cards.forEach(card => observer.observe(card));
+
+    // 4. Модальное окно
+    const toggleModal = (show) => {
+        if (!overlay) return;
+        overlay.classList.toggle('is-open', show);
+        document.documentElement.style.overflow = show ? 'hidden' : '';
+    };
+
+    if (openBtn) openBtn.addEventListener('click', () => toggleModal(true));
+    if (closeBtn) closeBtn.addEventListener('click', () => toggleModal(false));
+    if (overlay) {
+        overlay.addEventListener('click', (e) => { if (e.target === overlay) toggleModal(false); });
+    }
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') toggleModal(false); });
+
+    // 5. Drag-to-scroll (Улучшенный)
+    if (slider) {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        slider.addEventListener('mousedown', (e) => {
+            isDown = true;
+            slider.style.cursor = 'grabbing';
+            slider.style.scrollSnapType = 'none';
+            startX = e.pageX - slider.offsetLeft;
+            scrollLeft = slider.scrollLeft;
+        });
+
+        const endScroll = () => {
+            isDown = false;
+            slider.style.cursor = 'grab';
+            slider.style.scrollSnapType = 'x mandatory';
+        };
+
+        slider.addEventListener('mouseleave', endScroll);
+        slider.addEventListener('mouseup', endScroll);
+
+        slider.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - slider.offsetLeft;
+            const walk = (x - startX) * 2.5;
+            slider.scrollLeft = scrollLeft - walk;
+        });
+    }
+});
+</script>

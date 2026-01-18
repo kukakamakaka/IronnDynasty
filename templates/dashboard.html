@@ -1,0 +1,1945 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" href="{% static 'fitness/images/favicon-32x32і.png' %}?v=124">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IRON DYNASTY | Dashboard</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+    /* Базовый стиль заголовка */
+.welcome-title {
+    margin: 0; 
+    font-size: 1.8rem; 
+    font-weight: 800; 
+    letter-spacing: -0.5px; 
+    line-height: 1.2;
+    color: var(--fg-text); /* Welcome back будет менять цвет сам */
+    transition: color 0.3s ease;
+}
+
+/* Градиент на имени пользователя */
+.user-gradient {
+    text-transform: capitalize;
+    background: linear-gradient(to right, #ffffff, var(--fg-accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: all 0.3s ease;
+}
+
+/* Адаптация для СВЕТЛОЙ темы */
+body.light-theme .user-gradient {
+    /* В светлой теме меняем начало градиента с белого на черный */
+    background: linear-gradient(to right, #1a1a1a, var(--fg-accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+    .section-label {
+    font-size: 0.55rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    display: block;
+    margin-bottom: 12px;
+    /* Используем переменную прозрачности */
+    color: var(--fg-text-muted); 
+    opacity: 0.5; /* Дополнительная мягкость */
+    transition: color 0.3s ease;
+}
+
+/* Фикс для светлой темы, чтобы текст был читаемым, но не слишком ярким */
+body.light-theme .section-label {
+    color: #000000 !important;
+    opacity: 0.3; /* Делаем его нежно-серым */
+}
+    /* Базовые стили для текста плана */
+.plan-title-text {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: var(--fg-text); /* Авто-цвет темы */
+    transition: color 0.3s ease;
+}
+
+.plan-price-text {
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: var(--fg-text); /* Авто-цвет темы */
+    transition: color 0.3s ease;
+}
+
+/* Специфический акцент для светлой темы (опционально) */
+body.light-theme .plan-title-text {
+    background: linear-gradient(135deg, #1a1a1a 0%, var(--fg-accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+body.light-theme .plan-price-text {
+    color: var(--fg-accent) !important; /* Цена будет фиолетовой в светлой теме */
+}
+    /* Базовые стили карточки статуса */
+.authority-card {
+    position: relative; 
+    overflow: hidden;
+    padding: 20px; 
+    border-radius: 24px; 
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid var(--fg-border);
+}
+
+/* Темная тема (твой оригинальный стиль) */
+body:not(.light-theme) .authority-card {
+    background: linear-gradient(145deg, #0a0a0c 0%, #111114 100%);
+    border: 1px solid rgba(168, 85, 247, 0.2);
+}
+
+/* Светлая тема */
+body.light-theme .authority-card {
+    background: linear-gradient(145deg, #ffffff 0%, #f4f4f7 100%) !important;
+    border: 1px solid rgba(124, 58, 237, 0.1) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+/* Фикс текста внутри этой карточки для светлой темы */
+body.light-theme .authority-card h4,
+body.light-theme .authority-card p {
+    color: var(--fg-text) !important;
+}
+    /* Базовый стиль секции тренеров */
+.trainers-section {
+    padding: 25px;
+    border-radius: 24px;
+    background: var(--fg-card); /* Динамический фон */
+    border: 1px solid var(--fg-border);
+    transition: all 0.3s ease;
+}
+
+/* Настройка для Темной темы */
+body:not(.light-theme) .trainers-section {
+    background: #0a0a0c;
+}
+
+/* Настройка для Светлой темы */
+body.light-theme .trainers-section {
+    background: #ffffff !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+}
+
+/* Фикс текста внутри этой секции */
+body.light-theme .trainers-section h3,
+body.light-theme .trainers-section .section-title {
+    color: var(--fg-text) !important;
+}
+    /* Базовый стиль для карточки обновления данных */
+.bio-update-card {
+    padding: 20px;
+    background: var(--fg-card); /* Берет цвет из переменной темы */
+    border: 1px solid var(--fg-border);
+    transition: all 0.3s ease;
+}
+
+/* Настройка для Темной темы (чтобы сохранить твой темный оттенок) */
+body:not(.light-theme) .bio-update-card {
+    background: #111114;
+}
+
+/* Настройка для Светлой темы */
+body.light-theme .bio-update-card {
+    background: #ffffff !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+}
+
+/* Фикс для заголовка "Bio-Data Update" внутри этой карточки */
+body.light-theme .bio-update-card h3 {
+    color: var(--fg-text) !important;
+}
+
+/* Фикс для лейблов (Height, Weight, Avatar) */
+body.light-theme .bio-update-card label {
+    color: var(--fg-text-muted) !important;
+}
+    /* Базовый стиль контейнера (темная тема) */
+.profile-stats-container {
+    display: flex; 
+    justify-content: center; 
+    gap: 20px; 
+    margin-top: 20px; 
+    background: rgba(0, 0, 0, 0.4); 
+    padding: 12px; 
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+}
+
+/* Разделительная линия между Height и Weight */
+.profile-stats-container div[style*="width:1px"] {
+    background: rgba(168, 85, 247, 0.3) !important;
+}
+
+/* СВЕТЛАЯ ТЕМА */
+body.light-theme .profile-stats-container {
+    background: rgba(124, 58, 237, 0.05); /* Нежный фиолетовый фон вместо черного */
+    border: 1px solid rgba(124, 58, 237, 0.1);
+}
+
+body.light-theme .profile-stats-container p {
+    color: var(--fg-text-muted) !important;
+}
+
+body.light-theme .profile-stats-container h4 {
+    color: var(--fg-text) !important;
+}
+
+body.light-theme .profile-stats-container div[style*="width:1px"] {
+    background: rgba(0, 0, 0, 0.1) !important; /* Линия становится серой */
+}
+    /* Базовый стиль для текста уведомления */
+.notification-desc {
+    color: rgba(255, 255, 255, 0.6); /* Светло-серый для темной темы */
+    font-size: 0.85rem;
+    line-height: 1.4;
+    transition: color 0.3s ease;
+}
+
+/* Стиль для СВЕТЛОЙ темы */
+body.light-theme .notification-desc {
+    color: rgba(0, 0, 0, 0.55) !important; /* Насыщенный серый для белого фона */
+}
+    /* Исправление текста в инпутах и кнопках выбора файла */
+body.light-theme input[type="file"] {
+    color: var(--fg-text-muted) !important;
+}
+
+/* Цвет веса и роста (цифры) */
+body.light-theme .stat-item h4, 
+body.light-theme h2, 
+body.light-theme h1 span {
+    color: var(--fg-text) !important;
+}
+
+/* Фон под статистикой (Weight/Height) */
+body.light-theme .stat-item {
+    background: rgba(0, 0, 0, 0.03) !important;
+}
+
+/* Исправление карточек тренеров (текст внутри них) */
+body.light-theme .trainer-info h4 {
+    color: var(--fg-text) !important;
+}
+
+/* Текст в чате (баблы) */
+body.light-theme .partner .msg-bubble {
+    background: #f0f0f5 !important;
+    color: #1a1a1a !important;
+    border: 1px solid rgba(0,0,0,0.05) !important;
+}
+
+/* Цвет заголовков секций */
+body.light-theme .section-title {
+    color: var(--fg-accent) !important;
+}
+    /* Базовые стили для карточки приветствия */
+.welcome-card {
+    padding: 30px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+/* Настройки для ТЕМНОЙ темы (по умолчанию) */
+body:not(.light-theme) .welcome-card {
+    background: linear-gradient(135deg, rgba(20, 20, 22, 0.9), rgba(13, 13, 15, 0.9));
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Настройки для СВЕТЛОЙ темы */
+body.light-theme .welcome-card {
+    /* Делаем легкий светлый градиент, чтобы сохранить объем */
+    background: linear-gradient(135deg, #ffffff, #f9f9fb);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+}
+
+/* Исправляем цвет текста приветствия специально для этой карточки */
+body.light-theme .welcome-card h1, 
+body.light-theme .welcome-card h1 span {
+    color: #1a1a1a !important;
+}
+
+body.light-theme .welcome-card p {
+    color: rgba(0, 0, 0, 0.6) !important;
+}
+    /* Базовый стиль для карточки профиля (для обеих тем) */
+.profile-main-card {
+    text-align: center;
+    position: relative;
+    padding: 30px 20px;
+    /* Убираем жесткий градиент и ставим переменную */
+    background: var(--fg-card); 
+    border: 1px solid var(--fg-border);
+    transition: all 0.3s ease;
+}
+
+/* Специфические эффекты для ТЕМНОЙ темы */
+body:not(.light-theme) .profile-main-card {
+    background: linear-gradient(145deg, #1c1c21, #0f0f12);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border: 1px solid rgba(168, 85, 247, 0.25);
+}
+
+/* Специфические эффекты для СВЕТЛОЙ темы */
+body.light-theme .profile-main-card {
+    background: #ffffff;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    border: 1px solid rgba(0,0,0,0.05);
+}
+   body.light-theme .nav-icon-link {
+    background: rgba(124, 58, 237, 0.1) !important;
+    color: var(--fg-accent) !important;
+    border-color: rgba(124, 58, 237, 0.2) !important;
+}
+
+body.light-theme .notification-card {
+    background: white !important;
+    border: 1px solid rgba(0,0,0,0.1) !important;
+}
+
+body.light-theme .notification-card div {
+    color: #1a1a1a !important;
+}
+
+/* Фикс для цитаты в светлой теме */
+body.light-theme .iron-quote-container {
+    background: #fdfdfd !important;
+    border: 1px solid rgba(0,0,0,0.05) !important;
+}
+body.light-theme #iron-quote {
+    background: linear-gradient(180deg, #1a1a1a 0%, #444 100%) !important;
+    -webkit-background-clip: text !important;
+}
+
+    :root {
+        --fg-bg: #050505;
+        --fg-card: #0d0d0f;
+        --fg-text: #ffffff;
+        --fg-text-muted: rgba(255, 255, 255, 0.5);
+        --fg-accent: #a855f7;
+        --fg-border: rgba(255, 255, 255, 0.08);
+        --input-bg: #16161a;
+    }
+    /* СВЕТЛАЯ ТЕМА */
+    body.light-theme {
+        --fg-bg: #f4f4f7;
+        --fg-card: #ffffff;
+        --fg-text: #1a1a1a;
+        --fg-text-muted: rgba(0, 0, 0, 0.6);
+        --fg-accent: #7c3aed; /* Чуть более глубокий фиолетовый */
+        --fg-border: rgba(0, 0, 0, 0.08);
+        --input-bg: #fdfdfd;
+        --sidebar-bg: #ffffff;
+    }
+
+    body {
+    /* Цвета из переменных */
+    background-color: var(--fg-bg);
+    color: var(--fg-text);
+    
+    /* Шрифты и отступы */
+    font-family: 'Inter', sans-serif;
+    margin: 0; 
+    padding: 25px;
+    
+    /* Геометрия экрана (чтобы дашборд не прыгал) */
+    height: 100vh; 
+    box-sizing: border-box;
+    overflow: hidden;
+
+    /* Плавность перехода при смене темы */
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+    .iron-dashboard {
+        display: grid;
+        grid-template-columns: 320px 1fr 350px;
+        gap: 20px;
+        height: 100%;
+    }
+
+   .glass-card {
+    /* Цвета теперь полностью зависят от активной темы */
+    background: var(--fg-card);
+    border: 1px solid var(--fg-border);
+    color: var(--fg-text);
+    
+    /* Геометрия и отступы */
+    border-radius: 28px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+
+    /* Плавная анимация смены темы */
+    transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    
+    /* Чтобы контент внутри не вылетал за скругления */
+    position: relative;
+    overflow: hidden;
+}
+
+/* Добавим легкое свечение для светлой темы, чтобы карточки не сливались с фоном */
+body.light-theme .glass-card {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+}
+
+    .left-sidebar, .main-content, .right-sidebar {
+        overflow-y: auto;
+        height: 100%;
+        padding-right: 5px;
+    }
+
+    .avatar-wrapper {
+        width: 80px; height: 80px; margin: 0 auto 15px;
+        border-radius: 24px; padding: 3px;
+        background: linear-gradient(135deg, var(--fg-accent), #6366f1);
+    }
+    .avatar-wrapper img { width: 100%; height: 100%; border-radius: 21px; object-fit: cover; border: 3px solid var(--fg-card); }
+
+    .stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+    .stat-item { background: rgba(255,255,255,0.03); padding: 12px; border-radius: 18px; text-align: center; border: 1px solid var(--fg-border); }
+    .stat-item span { font-size: 0.6rem; color: var(--fg-text-muted) !important; text-transform: uppercase; }
+    .stat-item h4 { margin: 5px 0 0; color: var(--fg-accent); font-size: 1rem; }
+
+    .input-group { margin-bottom: 18px; display: flex; flex-direction: column; }
+    .input-group label { display: block; font-size: 0.7rem; color: var(--fg-text-muted) !important; text-transform: uppercase; margin-bottom: 8px; font-weight: 700; }
+    
+    .input-group input, .input-group select {
+    width: 100%; 
+    background: var(--input-bg) !important;
+    border: 1px solid var(--fg-border) !important;
+    padding: 12px 15px !important; 
+    border-radius: 12px !important; 
+    color: var(--fg-text) !important; /* ЗАМЕНА С white НА ПЕРЕМЕННУЮ */
+    outline: none; 
+    box-sizing: border-box; 
+    transition: 0.3s;
+}
+    
+    .section-title { font-size: 0.8rem; text-transform: uppercase; margin-bottom: 15px; color: var(--fg-text-muted) !important; font-weight: 800; }
+    .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
+.item-card {
+    /* Используем переменную карточки, чтобы цвет менялся системно */
+    background: var(--fg-card);
+    border: 1px solid var(--fg-border);
+    color: var(--fg-text);
+    
+    padding: 20px;
+    border-radius: 20px;
+    text-align: center;
+    
+    /* Улучшаем transition для всех свойств */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Эффект при наведении (универсальный для обеих тем) */
+.item-card:hover {
+    border-color: var(--fg-accent) !important;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Специфическая настройка для светлой темы */
+body.light-theme .item-card {
+    /* В светлой теме делаем карточки чуть контрастнее */
+    background: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+}
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-thumb { background: var(--fg-border); border-radius: 10px; }
+
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+
+.iron-dashboard {
+    display: grid;
+    grid-template-columns: 280px 1fr 320px; /* твои пропорции */
+    gap: 20px;
+    align-items: stretch; /* Важно: заставляет колонки быть одной высоты */
+}
+
+.right-sidebar {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Растягивается на всю высоту сетки */
+}
+
+.chat-box {
+    flex: 1; /* Заставляет чат забирать всё свободное место в колонке */
+    display: flex;
+    flex-direction: column;
+    min-height: 400px; /* Минималка, чтобы не схлопывался */
+}
+
+#chat-window {
+    flex: 1; /* Окно сообщений внутри чата тоже должно тянуться */
+    overflow-y: auto;
+}
+
+@keyframes slideInNotification {
+    from {
+        transform: translateX(120%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOutNotification {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0; transform: scale(0.95); }
+}
+
+</style>
+</head>
+<body>
+
+
+
+
+{% if messages %}
+<div id="notification-container" style="position: fixed; top: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 12px; width: 350px;">
+    {% for message in messages %}
+    <div class="notification-card {{ message.tags }}" style="
+        background: rgba(23, 23, 26, 0.8); 
+        backdrop-filter: blur(12px); 
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 20px;
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        animation: slideInNotification 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    ">
+        <div style="
+            width: 44px; 
+            height: 44px; 
+            background: rgba(168, 85, 247, 0.15); 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            flex-shrink: 0;
+        ">
+            <i class="fas {% if message.tags == 'success' %}fa-check{% else %}fa-exclamation{% endif %}" 
+               style="color: #a855f7; font-size: 1.2rem;"></i>
+        </div>
+
+        <div style="flex: 1;">
+            <div style="color: white; font-weight: 700; font-size: 0.95rem; margin-bottom: 2px;">
+                {% if message.tags == 'success' %}System Update{% else %}Attention{% endif %}
+            </div>
+           
+            <div class="notification-desc">
+    {{ message }}
+</div>
+        
+        </div>
+
+        <div style="width: 8px; height: 8px; background: #a855f7; border-radius: 50%; align-self: flex-start; margin-top: 4px; box-shadow: 0 0 10px #a855f7;"></div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="iron-dashboard">
+
+    <aside class="left-sidebar" style="
+    display: flex; 
+    flex-direction: column; 
+    height: 100vh; 
+    padding: 20px; 
+    background: var(--sidebar-bg); 
+    box-sizing: border-box;
+    border-right: 1px solid rgba(168, 85, 247, 0.1);
+">
+<style>
+    :root {
+        --fg-bg: #050505;
+        --fg-card: #0d0d0f;
+        --fg-text: #ffffff;
+        --fg-text-muted: rgba(255, 255, 255, 0.5);
+        --fg-accent: #a855f7;
+        --fg-border: rgba(255, 255, 255, 0.08);
+        --input-bg: #16161a;
+    }
+
+    /* 1. Глобальные фиксы */
+    * { box-sizing: border-box; }
+    html, body { max-width: 100%; overflow-x: hidden; }
+
+    /* Скроллбары */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(168, 85, 247, 0.2); border-radius: 10px; }
+
+    /* 2. Универсальные инпуты — Адаптивные */
+input[type="text"], 
+input[type="email"], 
+input[type="password"], 
+input[type="number"], 
+select, 
+textarea {
+    width: 100% !important;
+    background: var(--input-bg) !important;
+    /* Граница теперь плавно меняется от прозрачно-фиолетовой до четкой в светлой теме */
+    border: 1px solid var(--fg-border) !important; 
+    border-radius: 14px !important;
+    /* КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ: Цвет текста теперь берется из темы */
+    color: var(--fg-text) !important; 
+    padding: 12px 18px !important;
+    font-size: 0.9rem !important;
+    outline: none !important;
+    transition: all 0.3s ease;
+    margin-bottom: 12px;
+    display: block;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);
+}
+
+/* Эффект фокуса для инпутов */
+input:focus, select:focus, textarea:focus {
+    border-color: var(--fg-accent) !important;
+    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15) !important;
+}
+
+    /* --- СТИЛИЗАЦИЯ ИНПУТА АВАТАРКИ --- */
+    input[type="file"] {
+        background: var(--input-bg);
+        padding: 10px;
+        border-radius: 14px;
+        border: 1px dashed rgba(168, 85, 247, 0.3);
+        color: var(--fg-text-muted);
+        cursor: pointer;
+        width: 100%;
+    }
+
+    /* Стилизация кнопки внутри инпута файла */
+    input[type="file"]::file-selector-button {
+        background: rgba(168, 85, 247, 0.1);
+        color: var(--fg-accent);
+        border: 1px solid var(--fg-accent);
+        padding: 6px 12px;
+        border-radius: 8px;
+        margin-right: 15px;
+        cursor: pointer;
+        font-weight: 700;
+        transition: 0.3s;
+    }
+
+    input[type="file"]::file-selector-button:hover {
+        background: var(--fg-accent);
+        color: #fff;
+    }
+
+    /* --- ФИКС ИКОНОК (Logout / Home) --- */
+    .nav-icon-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: rgba(255,255,255,0.03);
+        color: var(--fg-text-muted);
+        transition: 0.3s;
+        text-decoration: none;
+    }
+
+    .nav-icon-link:hover {
+        background: rgba(168, 85, 247, 0.1);
+        color: var(--fg-accent);
+        transform: translateY(-2px);
+    }
+
+  /* 3. Кнопка-капсула (УЛУЧШЕННАЯ) */
+    .btn-iron-pill {
+        position: relative; 
+        width: 100%; 
+        padding: 16px; 
+        border-radius: 50px;
+        background: linear-gradient(180deg, #9333ea 0%, #581c87 100%);
+        border: 1px solid rgba(168, 85, 247, 0.5);
+        color: #fff; 
+        font-weight: 900; 
+        text-transform: uppercase; 
+        letter-spacing: 2px;
+        cursor: pointer; 
+        overflow: hidden; 
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Пружинистый эффект */
+        display: flex; 
+        align-items: center; 
+        justify-content: center;
+        margin-top: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(168, 85, 247, 0.4);
+    }
+
+    /* ПОСТОЯННЫЙ БЛИК (всегда работает) */
+    .btn-iron-pill::after {
+        content: ''; 
+        position: absolute; 
+        top: 0; 
+        left: -150%; 
+        width: 60%; 
+        height: 100%;
+        background: linear-gradient(
+            90deg, 
+            transparent, 
+            rgba(255, 255, 255, 0.4), 
+            transparent
+        );
+        transform: skewX(-25deg); 
+        animation: constantShine 4s infinite linear;
+    }
+
+    /* ЭФФЕКТ ПРИ НАВЕДЕНИИ */
+    .btn-iron-pill:hover {
+        transform: translateY(-3px) scale(1.02); /* Кнопка приподнимается и чуть растет */
+        background: linear-gradient(180deg, #a855f7 0%, #6b21a8 100%);
+        box-shadow: 0 10px 25px rgba(168, 85, 247, 0.6), 0 0 15px rgba(168, 85, 247, 0.4);
+        border-color: rgba(255, 255, 255, 0.6);
+    }
+
+    /* Ускоряем блик при наведении */
+    .btn-iron-pill:hover::after {
+        animation-duration: 1.5s;
+    }
+
+    /* Текст внутри кнопки */
+    .btn-text {
+        position: relative;
+        z-index: 2;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    /* АНИМАЦИЯ БЛИКА */
+    @keyframes constantShine { 
+        0% { left: -150%; } 
+        20% { left: 150%; } /* Пролетает быстро */
+        100% { left: 150%; } /* Пауза перед следующим циклом */
+    }
+
+    /* Дополнительная пульсация границ при наведении */
+    @keyframes borderGlow {
+        0% { box-shadow: 0 0 5px rgba(168, 85, 247, 0.5); }
+        50% { box-shadow: 0 0 20px rgba(168, 85, 247, 0.8); }
+        100% { box-shadow: 0 0 5px rgba(168, 85, 247, 0.5); }
+    }
+
+    .btn-iron-pill:hover {
+        animation: borderGlow 1.5s infinite ease-in-out;
+    }
+    /* 4. Карточки */
+.glass-card-clean, .plan-card-ultimate {
+    /* Фон и границы теперь динамические */
+    background: var(--fg-card);
+    border: 1px solid var(--fg-border);
+    color: var(--fg-text);
+
+    /* Геометрия */
+    border-radius: 28px;
+    padding: 20px;
+    margin-bottom: 20px;
+    width: 100%;
+
+    /* Плавная смена темы */
+    transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Специфический эффект для светлой темы */
+body.light-theme .glass-card-clean, 
+body.light-theme .plan-card-ultimate {
+    background: #ffffff; /* Чистый белый для лучшей читаемости */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04); /* Легкая тень вместо свечения */
+}
+
+    /* 5. Чат и Authority */
+    .status-dot-pulse {
+        position: absolute; bottom: 2px; right: 2px; width: 12px; height: 12px;
+        border-radius: 50%; border: 2px solid #0a0a0c; animation: statusPulse 2s infinite;
+    }
+    @keyframes statusPulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.2); opacity: 0.7; } }
+
+    /* 6. Мобильная версия */
+    @media (max-width: 1100px) {
+        .right-sidebar { width: 100% !important; padding: 10px !important; }
+        #chat-window { max-height: 400px; }
+    }
+</style>
+
+    <div class="sidebar-scrollable">
+        <div class="glass-card profile-main-card">
+            <div style="position: absolute; top: 20px; left: 20px; right: 20px; display: flex; justify-content: space-between; z-index: 100;">
+    <a href="/" class="nav-icon-link" title="Homepage" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 14px; color: #fff; text-decoration: none; transition: 0.3s;">
+        <i class="fas fa-home" style="font-size: 1.1rem;"></i>
+    </a>
+
+    <form method="post" action="{% url 'logout' %}" style="margin:0">
+        {% csrf_token %}
+        <button type="submit" class="nav-icon-link" title="Logout" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 14px; color: #fff; cursor: pointer; transition: 0.3s;">
+            <i class="fas fa-sign-out-alt" style="font-size: 1.1rem;"></i>
+        </button>
+    </form>
+</div>
+
+            <div style="width: 100px; height: 100px; margin: 10px auto 15px; border: 3px solid #a855f7; border-radius: 50%; padding: 4px; box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);">
+                <img src="{% if profile.avatar %}{{ profile.avatar.url }}{% else %}https://via.placeholder.com/100{% endif %}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
+            </div>
+            
+            <h2 style="margin: 0; font-size: 1.4rem; color: #fff; font-weight: 700;">{{ user.username }}</h2>
+            <span style="color: #a855f7; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px;">{{ profile.role }}</span>
+            
+<div class="profile-stats-container">                <div>
+                    <p style="margin:0; font-size:0.6rem; color:#666; font-weight: 700;">HEIGHT</p>
+                    <h4 style="margin:0; color:#fff; font-size:1.1rem;">{{ profile.height|default:"0" }}<small style="font-size: 0.7rem; color: #a855f7; margin-left: 2px;">cm</small></h4>
+                </div>
+                <div style="width:1px; background:rgba(168, 85, 247, 0.2); height:25px; align-self:center;"></div>
+                <div>
+                    <p style="margin:0; font-size:0.6rem; color:#666; font-weight: 700;">WEIGHT</p>
+                    <h4 style="margin:0; color:#fff; font-size:1.1rem;">{{ profile.weight|default:"0" }}<small style="font-size: 0.7rem; color: #a855f7; margin-left: 2px;">kg</small></h4>
+                </div>
+            </div>
+        </div>
+
+<div class="glass-card bio-update-card">
+    <h3 style="margin: 0 0 15px; font-size: 0.8rem; color: #fff; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px;">
+                <div style="width: 4px; height: 14px; background: #a855f7; border-radius: 2px;"></div> Bio-Data Update
+            </h3>
+            <form method="post" action="{% url 'edit_profile' %}" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 15px;">
+                {% csrf_token %}
+                <div>
+                    <label style="display: block; font-size: 0.65rem; color: #555; margin-bottom: 6px; font-weight: 700; text-transform: uppercase;">Avatar Photo</label>
+                    {{ form.avatar }}
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <div style="flex: 1;">
+                        <label style="display: block; font-size: 0.65rem; color: #555; margin-bottom: 6px; font-weight: 700; text-transform: uppercase;">Height</label>
+                        {{ form.height }}
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="display: block; font-size: 0.65rem; color: #555; margin-bottom: 6px; font-weight: 700; text-transform: uppercase;">Weight</label>
+                        {{ form.weight }}
+                    </div>
+                </div>
+                
+             <button type="submit" class="btn-iron-pill">
+    <span class="btn-text">Update Profile</span>
+    <div class="reflection"></div>
+    <div class="auto-shine"></div>
+</button>
+                
+            </form>
+        </div>
+<!-- MOTIVATION -->
+     <div class="iron-quote-container" style="
+    position: relative;
+    padding: 30px 20px;
+    background: #0d0d0f;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+">
+    <div style="
+        position: absolute; 
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: radial-gradient(circle at center, rgba(168, 85, 247, 0.08) 0%, transparent 70%);
+        pointer-events: none;
+    "></div>
+
+    <i class="fas fa-dumbbell" style="
+        color: #a855f7; 
+        font-size: 0.8rem; 
+        margin-bottom: 15px; 
+        opacity: 0.5;
+        letter-spacing: 5px;
+    "></i>
+    
+    <p id="iron-quote" style="
+        font-family: 'Inter', sans-serif;
+        font-size: 1.1rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: #fff;
+        margin: 0;
+        line-height: 1.3;
+        letter-spacing: -0.5px;
+        background: linear-gradient(180deg, #ffffff 0%, #a1a1aa 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.2));
+        transition: 0.5s;
+    ">
+        "LOADING POWER..."
+    </p>
+
+    <div style="
+        margin-top: 20px;
+        font-size: 0.6rem;
+        font-weight: 900;
+        color: #a855f7;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        opacity: 0.6;
+    ">Ironn Mindset</div>
+</div>
+<!-- MOTIVATION -->
+        <div style="text-align: center; padding: 15px 0;">
+            <a href="{% url 'delete_profile' %}" onclick="return confirm('Are you sure? This cannot be undone.')" style="
+                text-decoration: none; 
+                color: #ff4444; 
+                font-size: 0.75rem; 
+                font-weight: 600;
+                text-transform: uppercase; 
+                letter-spacing: 1px;
+                opacity: 0.6;
+                transition: 0.3s;
+            " onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">
+                <i class="fas fa-trash-alt" style="margin-right: 5px;"></i> Delete Account
+            </a>
+        </div>
+    </div>
+</aside>
+
+    <main class="main-content">
+    
+      <div class="glass-card welcome-card">
+          
+    <div style="
+        position: absolute; 
+        top: -20px; 
+        right: -20px; 
+        width: 120px; 
+        height: 120px; 
+        background: var(--fg-accent); 
+        filter: blur(80px); 
+        opacity: 0.15;
+    "></div>
+
+    <div style="display: flex; align-items: center; gap: 20px; position: relative; z-index: 1;">
+        <div style="
+            background: rgba(168, 85, 247, 0.12); 
+            width: 60px; 
+            height: 60px; 
+            border-radius: 18px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.1);
+        ">
+            <i class="fas fa-bolt" style="
+                background: linear-gradient(135deg, #fff, var(--fg-accent));
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                font-size: 1.6rem;
+            "></i>
+        </div>
+
+        <div>
+            <h1 class="welcome-title">
+    Welcome back, <span class="user-gradient">{{ user.username }}</span>!
+</h1>
+            
+            <div style="display: flex; align-items: center; gap: 8px; margin-top: 6px;">
+                <p style="margin: 0; color: var(--fg-text-muted); font-size: 0.85rem; font-weight: 500;">
+                    Ready to crush your goals today?
+                </p>
+                <span style="width: 4px; height: 4px; background: var(--fg-text-muted); border-radius: 50%; opacity: 0.3;"></span>
+                <p style="margin: 0; color: white; font-size: 0.85rem; font-weight: 600; opacity: 0.9;">
+                    {% now "l, d F" %}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <div class="glass-card" style="height: 350px;">
+            <span class="section-title">Weight Progress</span>
+            <canvas id="weightChart"></canvas>
+        </div>
+
+        {% if profile.role == 'TRAINER' %}
+        <div class="glass-card">
+            <span class="section-title">Your Students (Click to Chat)</span>
+            <div class="grid-container">
+                {% for student in students %}
+                <div class="item-card" 
+                     onclick="switchChat('{{ student.user.id }}', '{{ student.user.username }}', '{% if student.avatar %}{{ student.avatar.url }}{% else %}https://via.placeholder.com/100{% endif %}')"
+                     style="cursor: pointer; border: 1px solid var(--fg-border);">
+                    <div style="width: 45px; height: 45px; margin: 0 auto 10px; border-radius: 10px; overflow: hidden;">
+                        <img src="{% if student.avatar %}{{ student.avatar.url }}{% else %}https://via.placeholder.com/100{% endif %}" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <h4 style="margin: 0;">{{ student.user.username }}</h4>
+                    <span style="font-size: 0.6rem; color: var(--fg-accent);">{{ student.active_plan.title|default:"No Plan" }}</span>
+                </div>
+                {% empty %}
+                <p style="grid-column: 1/-1; text-align: center; color: var(--fg-text-muted);">No students assigned yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% else %}
+            
+      <div class="glass-card trainers-section">
+      
+    <style>
+        
+        .compact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+       .trainer-mini-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    /* ИСПОЛЬЗУЕМ ПЕРЕМЕННЫЕ */
+    background: var(--fg-card);
+    border: 1px solid var(--fg-border);
+    color: var(--fg-text);
+    
+    padding: 12px 15px;
+    border-radius: 18px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+.trainer-mini-card:hover {
+    /* В светлой теме будет чуть светлее, в темной чуть ярче */
+    background: var(--input-bg);
+    border-color: var(--fg-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.mini-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    object-fit: cover;
+    filter: saturate(1.1);
+    /* Граница аватарки теперь тоже адаптивная */
+    border: 1px solid var(--fg-border);
+}
+
+.trainer-info {
+    flex: 1;
+}
+
+.trainer-info h4 {
+    margin: 0;
+    /* Цвет текста заголовка адаптивный */
+    color: var(--fg-text);
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.trainer-info span {
+    font-size: 0.7rem;
+    /* Цвет подзаголовка адаптивный */
+    color: var(--fg-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-minimal {
+    /* Прозрачный фиолетовый фон подстраивается под яркость темы */
+    background: rgba(168, 85, 247, 0.15);
+    color: var(--fg-accent);
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-minimal:hover {
+    background: var(--fg-accent);
+    color: #fff; /* Здесь белый можно оставить, так как кнопка становится залитой фиолетовым */
+}
+
+/* ФИКС ДЛЯ СВЕТЛОЙ ТЕМЫ: Убираем лишние тени и настраиваем контраст */
+body.light-theme .trainer-mini-card {
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+        /* АДАПТИВНОСТЬ ДЛЯ МОБИЛЬНЫХ */
+@media (max-width: 1100px) {
+    body {
+        height: auto;
+        overflow-y: auto;
+        padding: 10px;
+    }
+
+    .iron-dashboard {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    /* Боковые панели на мобильных занимают всю ширину */
+    .left-sidebar, .right-sidebar {
+        width: 100% !important;
+        height: auto !important;
+        border: none !important;
+        padding: 0 !important;
+        overflow: visible !important;
+    }
+
+    /* Сайдбар — Исправленный */
+aside.left-sidebar {
+    background-color: var(--sidebar-bg) !important;
+    border-right: 1px solid var(--fg-border) !important;
+    /* Убираем 100vh, чтобы на мобилках высота была по контенту, 
+       а на десктопе растягивалась сеткой */
+    height: auto; 
+    min-height: 100%;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Дополнительный фикс для текста внутри селектора (Dropdown) */
+select option {
+    background: var(--fg-card);
+    color: var(--fg-text);
+}
+    /* График делаем чуть меньше для компактности */
+    .glass-card[style*="height: 350px"] {
+        height: 280px !important;
+    }
+
+    /* Уведомления сужаем под ширину экрана */
+    #notification-container {
+        width: calc(100% - 40px) !important;
+        left: 20px;
+        right: 20px;
+    }
+}
+
+/* Фикс для маленьких телефонов (iPhone SE и т.д.) */
+@media (max-width: 480px) {
+    .grid-container {
+        grid-template-columns: 1fr 1fr; /* Студенты в два ряда */
+    }
+    
+    .stats-row {
+        grid-template-columns: 1fr;
+    }
+
+    h1 { font-size: 1.4rem !important; }
+}
+
+/* Скрываем скроллбары для чистоты интерфейса */
+.sidebar-scrollable, .main-content, #chat-window {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.sidebar-scrollable::-webkit-scrollbar, 
+.main-content::-webkit-scrollbar,
+#chat-window::-webkit-scrollbar {
+    display: none;
+}
+
+
+/* Контейнер сообщения */
+.msg-container {
+    display: flex;
+    margin-bottom: 16px;
+    width: 100%;
+    /* Анимация удалена для мгновенного появления */
+}
+
+.msg-wrapper {
+    display: flex;
+    gap: 12px;
+    max-width: 85%;
+    align-items: flex-end;
+}
+
+.mine { justify-content: flex-end; }
+.mine .msg-wrapper { flex-direction: row-reverse; }
+
+/* Аватарки */
+.chat-avg {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid rgba(168, 85, 247, 0.4);
+    background: #16161a;
+    object-fit: cover;
+}
+
+/* Пузырьки сообщений */
+.msg-bubble {
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    position: relative;
+    color: #fff;
+    line-height: 1.4;
+}
+
+/* Мой стиль (Фиолетовый неон) */
+.mine .msg-bubble {
+    background: linear-gradient(135deg, #a855f7, #7e22ce);
+    border-radius: 18px 18px 4px 18px;
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.2);
+}
+
+/* Стиль партнера (Стекло) */
+.partner .msg-bubble {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 18px 18px 18px 4px;
+}
+
+/* Время */
+.msg-time {
+    font-size: 0.65rem;
+    opacity: 0.4;
+    margin-top: 4px;
+    text-align: right;
+}
+
+/* Спиннер загрузки оставляем только для процесса переключения */
+.chat-loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+.chat-loader span {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(168, 85, 247, 0.2);
+    border-top-color: #a855f7;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }/* Контейнер сообщения */
+.msg-container {
+    display: flex;
+    margin-bottom: 16px;
+    width: 100%;
+    /* Анимация удалена для мгновенного появления */
+}
+
+.msg-wrapper {
+    display: flex;
+    gap: 12px;
+    max-width: 85%;
+    align-items: flex-end;
+}
+
+.mine { justify-content: flex-end; }
+.mine .msg-wrapper { flex-direction: row-reverse; }
+
+/* Аватарки */
+.chat-avg {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid rgba(168, 85, 247, 0.4);
+    background: #16161a;
+    object-fit: cover;
+}
+
+/* Пузырьки сообщений */
+.msg-bubble {
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    position: relative;
+    color: #fff;
+    line-height: 1.4;
+}
+
+/* Мой стиль (Фиолетовый неон) */
+.mine .msg-bubble {
+    background: linear-gradient(135deg, #a855f7, #7e22ce);
+    border-radius: 18px 18px 4px 18px;
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.2);
+}
+
+/* Стиль партнера (Стекло) */
+.partner .msg-bubble {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 18px 18px 18px 4px;
+}
+
+/* Время */
+.msg-time {
+    font-size: 0.65rem;
+    opacity: 0.4;
+    margin-top: 4px;
+    text-align: right;
+}
+
+/* Спиннер загрузки оставляем только для процесса переключения */
+.chat-loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+.chat-loader span {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(168, 85, 247, 0.2);
+    border-top-color: #a855f7;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+
+/* Анимация пульсации для индикатора статуса */
+    .status-dot-pulse {
+        position: absolute;
+        bottom: 2px;
+        right: 2px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        border: 2px solid #0a0a0c;
+        animation: statusPulse 2s infinite ease-in-out;
+    }
+
+    @keyframes statusPulse {
+        0% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.15); opacity: 0.7; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Эффект при наведении на всю карточку */
+    .authority-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(168, 85, 247, 0.5);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    }
+    
+    </style>
+
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
+        <div style="width: 3px; height: 16px; background: #a855f7; border-radius: 2px;"></div>
+        <span style="color: #fff; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;">Trainers</span>
+    </div>
+
+    <div class="compact-grid">
+        {% for t in all_trainers %}
+        <div class="trainer-mini-card">
+            <img class="mini-avatar" src="{% if t.profile.avatar %}{{ t.profile.avatar.url }}{% else %}https://via.placeholder.com/50{% endif %}" alt="">
+            
+            <div class="trainer-info">
+                <h4>{{ t.profile.user.username }}</h4>
+                <span>Pro Mentor</span>
+            </div>
+
+            <form method="post" action="{% url 'select_trainer' t.id %}" style="margin:0">
+                {% csrf_token %}
+                <button type="submit" class="btn-minimal">
+                    <i class="fas fa-plus" style="font-size: 0.8rem;"></i>
+                </button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+            
+        {% endif %}
+    </main>
+
+  
+    
+     <aside class="right-sidebar" style="display: flex; flex-direction: column; gap: 20px; height: 100vh; padding: 0 10px;">
+    
+    <style>
+        /* --- БАЗОВЫЕ ПАНЕЛИ --- */
+        .plan-card-ultimate {
+            background: linear-gradient(135deg, #1a1a1c 0%, #0d0d0f 100%);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            border-radius: 28px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .glass-card-clean {
+            background: #0a0a0c;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 20px;
+        }
+        .section-label {
+            color: #444;
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        /* --- СТИЛИ ЧАТА (ТЕ САМЫЕ КРУТЫЕ) --- */
+        .msg-container {
+            display: flex;
+            margin-bottom: 16px;
+            width: 100%;
+        }
+        .msg-wrapper {
+            display: flex;
+            gap: 12px;
+            max-width: 85%;
+            align-items: flex-end;
+        }
+        .mine { justify-content: flex-end; }
+        .mine .msg-wrapper { flex-direction: row-reverse; }
+
+        .chat-avg {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            background: #16161a;
+            object-fit: cover;
+        }
+
+        .msg-bubble {
+            padding: 10px 16px;
+            font-size: 0.85rem;
+            position: relative;
+            color: #fff;
+            line-height: 1.4;
+        }
+
+        /* Мои сообщения */
+        .mine .msg-bubble {
+            background: linear-gradient(135deg, #a855f7, #7e22ce);
+            border-radius: 18px 18px 4px 18px;
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.2);
+        }
+
+        /* Сообщения собеседника */
+        .partner .msg-bubble {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 18px 18px 18px 4px;
+        }
+
+        .msg-time {
+            font-size: 0.65rem;
+            opacity: 0.4;
+            margin-top: 4px;
+            text-align: right;
+        }
+
+        /* --- ИНПУТ И КНОПКА --- */
+        /* Контейнер ввода */
+.chat-input-modern {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: var(--input-bg);
+    border-top: 1px solid var(--fg-border);
+    transition: all 0.3s ease;
+}
+
+/* Кнопка отправки */
+.chat-send-btn {
+    background: var(--fg-accent); /* Фиолетовый из переменной */
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.chat-send-btn:hover {
+    transform: scale(1.1) rotate(-10deg);
+    filter: brightness(1.1);
+}
+
+/* Настройка инпута внутри чата */
+#chat-input {
+    flex: 1;
+    background: transparent !important;
+    border: none !important;
+    padding: 8px !important;
+    margin-bottom: 0 !important; /* Убираем нижний отступ, если он есть */
+    box-shadow: none !important;
+}
+
+/* Специфика для СВЕТЛОЙ темы */
+body.light-theme .chat-input-modern {
+    background: #ffffff;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+body.light-theme #chat-input::placeholder {
+    color: rgba(0, 0, 0, 0.3);
+}
+        
+        /* Стилизация скролла */
+        #chat-window::-webkit-scrollbar { width: 4px; }
+        #chat-window::-webkit-scrollbar-thumb { background: rgba(168, 85, 247, 0.3); border-radius: 10px; }
+    </style>
+
+<div class="authority-mobile-wrapper" style="padding-top: 20px; width: 100%;">
+
+<div class="glass-card-clean authority-card">
+
+        <div style="position: absolute; top: -30px; right: -30px; width: 80px; height: 80px; background: rgba(168, 85, 247, 0.15); filter: blur(35px); border-radius: 50%;"></div>
+
+<span class="section-label">System Authority</span>
+
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <div class="avatar-circle-wrapper" style="position: relative; width: 52px; height: 52px; padding: 2px; background: linear-gradient(45deg, #a855f7, transparent); border-radius: 50%;">
+                <div style="width: 100%; height: 100%; border-radius: 50%; background: #0a0a0c; padding: 2px;">
+                    {% if profile.role == 'TRAINER' %}
+                        <img src="{% if profile.avatar %}{{ profile.avatar.url }}{% else %}https://via.placeholder.com/52{% endif %}" 
+                             style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                        <div class="status-dot-pulse" style="background: #a855f7; box-shadow: 0 0 12px #a855f7;"></div>
+                    {% else %}
+                        <img src="{% if profile.assigned_trainer.profile.avatar %}{{ profile.assigned_trainer.profile.avatar.url }}{% else %}https://via.placeholder.com/52{% endif %}" 
+                             style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                        <div class="status-dot-pulse" style="background: #10b981; box-shadow: 0 0 12px #10b981;"></div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div style="flex: 1;">
+                {% if profile.role == 'TRAINER' %}
+                    <div style="display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; background: rgba(168, 85, 247, 0.08); border-radius: 6px; border: 1px solid rgba(168, 85, 247, 0.15); margin-bottom: 4px;">
+                        <span style="width: 5px; height: 5px; background: #a855f7; border-radius: 50%;"></span>
+                        <span style="font-size: 0.6rem; color: #a855f7; font-weight: 900; text-transform: uppercase; letter-spacing: 1px;">HQ Commander</span>
+                    </div>
+                    <h4 style="margin: 0; color: #fff; font-size: 1.15rem; font-weight: 800; letter-spacing: -0.5px;">{{ profile.user.username }}</h4>
+                {% else %}
+                    <div style="display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; background: rgba(16, 185, 129, 0.08); border-radius: 6px; border: 1px solid rgba(16, 185, 129, 0.15); margin-bottom: 4px;">
+                        <span style="width: 5px; height: 5px; background: #10b981; border-radius: 50%;"></span>
+                        <span style="font-size: 0.6rem; color: #10b981; font-weight: 900; text-transform: uppercase; letter-spacing: 1px;">Active Mentor</span>
+                    </div>
+                    <h4 style="margin: 0; color: #fff; font-size: 1.15rem; font-weight: 800; letter-spacing: -0.5px;">
+                        {% if profile.assigned_trainer %}{{ profile.assigned_trainer.user.username }}{% else %}Scan Pending...{% endif %}
+                    </h4>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+    {% if profile.role != 'TRAINER' %}
+    <div class="plan-card-ultimate">
+        <span class="section-label" style="color:#a855f7">Active Plan</span>
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 10px;">
+     <h2 class="plan-title-text">{{ profile.active_plan.title|default:"Basic" }}</h2>
+<span class="plan-price-text">${{ profile.active_plan.price|default:"0" }}</span>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="glass-card-clean" style="flex: 1; display: flex; flex-direction: column; min-height: 400px;">
+        <div style="padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 10px;">
+            <span style="color: #a855f7; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; display: block; margin-bottom: 4px;">Direct Message</span>
+            <h3 id="chat-header-title" style="margin: 0; color: #fff; font-size: 1.1rem; font-weight: 700;">
+                {% if profile.role == 'TRAINER' %}Select Student{% else %}Chat with Mentor{% endif %}
+            </h3>
+        </div>
+
+        <div id="chat-window" style="flex: 1; overflow-y: auto; padding: 10px 0; display: flex; flex-direction: column;">
+            </div>
+
+        <div class="chat-input-modern">
+    <input type="text" id="chat-input" placeholder="Type message..." autocomplete="off">
+    <button id="send-btn" class="chat-send-btn">
+        <i class="fas fa-paper-plane"></i>
+    </button>
+</div>
+    </div>
+</aside>
+
+</div>
+
+<script>
+const ctx = document.getElementById('weightChart').getContext('2d');
+
+// 1. Делаем градиент под графиком более насыщенным
+const fillGradient = ctx.createLinearGradient(0, 0, 0, 400);
+fillGradient.addColorStop(0, 'rgba(168, 85, 247, 0.25)'); 
+fillGradient.addColorStop(1, 'rgba(5, 5, 5, 0)'); // Уходит в цвет фона
+
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: {{ labels|safe }},
+        datasets: [{
+            label: 'Weight',
+            data: {{ values|safe }},
+            borderColor: '#a855f7',
+            borderWidth: 3, // Сделали линию чуть толще
+            tension: 0.45, // Более «жидкий» и плавный изгиб
+            fill: true,
+            backgroundColor: fillGradient,
+            
+            // Стили точек (сделали их как неоновые лампочки)
+            pointRadius: 4,
+            pointBackgroundColor: '#16161a', // Темный центр
+            pointBorderColor: '#a855f7',
+            pointBorderWidth: 2,
+            
+            // Эффект при наведении (точка увеличивается и светится белым)
+            pointHoverRadius: 8,
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: '#a855f7',
+            pointHoverBorderWidth: 3
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        // 2. Плавная анимация появления
+        animation: {
+            duration: 2000,
+            easing: 'easeOutQuart'
+        },
+        interaction: {
+            intersect: false, 
+            mode: 'index',
+        },
+        plugins: {
+            legend: { display: false },
+            tooltip: {
+                enabled: true,
+                backgroundColor: 'rgba(22, 22, 26, 0.9)', // Стекло в тултипе
+                titleColor: '#a855f7',
+                bodyColor: '#fff',
+                bodyFont: { size: 16, weight: '800' },
+                padding: 15,
+                displayColors: false,
+                borderColor: 'rgba(168, 85, 247, 0.3)',
+                borderWidth: 1,
+                cornerRadius: 12,
+                callbacks: {
+                    label: (context) => `⚡ ${context.parsed.y} KG` // Добавили иконку молнии
+                }
+            }
+        },
+        scales: {
+            y: {
+                // 3. ФИКС: График не будет начинаться с нуля (вес 70 не будет в самом верху)
+                beginAtZero: false, 
+                grace: '10%', // Оставляет место сверху и снизу
+                grid: { color: 'rgba(255, 255, 255, 0.05)', drawBorder: false },
+                ticks: { color: 'rgba(168, 85, 247, 0.7)', font: { size: 11, weight: '600' } }
+            },
+            x: {
+                grid: { display: false },
+                ticks: { color: 'rgba(255, 255, 255, 0.4)', font: { size: 10 } }
+            }
+        }
+    },
+    plugins: [{
+        // 4. ЭФФЕКТ СВЕЧЕНИЯ ЛИНИИ (Bloom effect)
+        beforeDraw: (chart) => {
+            const { ctx } = chart;
+            ctx.save();
+            ctx.shadowColor = 'rgba(168, 85, 247, 0.6)'; // Цвет свечения
+            ctx.shadowBlur = 15; // Насколько сильно «горит» линия
+            ctx.shadowOffsetY = 4;
+        },
+        // Рисуем вертикальную линию сканера при наведении
+        afterDraw: (chart) => {
+            if (chart.tooltip?._active?.length) {
+                const { ctx } = chart;
+                const activePoint = chart.tooltip._active[0];
+                const x = activePoint.element.x;
+                const topY = chart.scales.y.top;
+                const bottomY = chart.scales.y.bottom;
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.moveTo(x, topY);
+                ctx.lineTo(x, bottomY);
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = 'rgba(168, 85, 247, 0.4)';
+                ctx.setLineDash([5, 5]); // Пунктирная линия
+                ctx.stroke();
+                ctx.restore();
+            }
+            chart.ctx.restore(); 
+        }
+    }]
+});
+
+// 2. ULTRA-MODERN CYBER CHAT LOGIC
+const chatWindow = document.getElementById('chat-window');
+const chatInput = document.getElementById('chat-input');
+const sendBtn = document.getElementById('send-btn');
+
+let receiverId = "";
+const myAvatar = "{% if profile.avatar %}{{ profile.avatar.url }}{% else %}https://via.placeholder.com/100{% endif %}";
+let partnerAvatar = "https://via.placeholder.com/100";
+
+{% if profile.role == 'TRAINER' and students %}
+    receiverId = "{{ students.0.user.id }}";
+    partnerAvatar = "{% if students.0.avatar %}{{ students.0.avatar.url }}{% else %}https://via.placeholder.com/100{% endif %}";
+{% elif profile.assigned_trainer %}
+    receiverId = "{{ profile.assigned_trainer.profile.user.id }}";
+    partnerAvatar = "{% if profile.assigned_trainer.profile.avatar %}{{ profile.assigned_trainer.profile.avatar.url }}{% else %}https://via.placeholder.com/100{% endif %}";
+{% endif %}
+ 
+const fetchMessages = () => {
+    if (!receiverId || !chatWindow) return;
+    fetch(`/chat/get/${receiverId}/`)
+        .then(r => r.json())
+        .then(data => {
+            const isAtBottom = chatWindow.scrollHeight - chatWindow.scrollTop <= chatWindow.clientHeight + 100;
+            chatWindow.innerHTML = '';
+            
+            data.messages.forEach((msg) => {
+                const isMine = msg.is_mine;
+                const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+                chatWindow.innerHTML += `
+                    <div class="msg-container ${isMine ? 'mine' : 'partner'}">
+                        <div class="msg-wrapper">
+                            <img src="${isMine ? myAvatar : partnerAvatar}" class="chat-avg">
+                            <div class="msg-bubble">
+                                ${msg.message}
+                                <div class="msg-time">${time}</div>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+
+            if (isAtBottom) chatWindow.scrollTop = chatWindow.scrollHeight;
+        });
+};
+
+const sendMessage = () => {
+    const text = chatInput.value.trim();
+    if (!text || !receiverId) return;
+    fetch('/chat/send/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token }}' },
+        body: JSON.stringify({ receiver_id: receiverId, message: text })
+    }).then(r => { if (r.ok) { chatInput.value = ''; fetchMessages(); } });
+};
+
+function switchChat(newId, name, avatarUrl) {
+    receiverId = newId;
+    partnerAvatar = avatarUrl;
+    const headerTitle = document.getElementById('chat-header-title');
+    if (headerTitle) headerTitle.innerText = name;
+    chatWindow.innerHTML = '<div class="chat-loader"><span></span></div>';
+    fetchMessages();
+}
+
+setInterval(fetchMessages, 4000);
+fetchMessages();
+
+chatInput.onkeydown = (e) => { if (e.key === 'Enter') { e.preventDefault(); sendMessage(); } };
+if (sendBtn) sendBtn.onclick = sendMessage;
+
+// 3. QUOTES & NOTIFICATIONS
+document.addEventListener('DOMContentLoaded', () => {
+    // Исчезновение уведомлений
+    const notifications = document.querySelectorAll('.notification-card');
+    notifications.forEach(n => {
+        setTimeout(() => {
+            n.style.animation = 'fadeOutNotification 0.5s ease forwards';
+            setTimeout(() => n.remove(), 500);
+        }, 4000);
+    });
+
+    // Цитаты (если элемент есть в HTML)
+    const quotes = ["Discipline is key.", "Keep going.", "Pride is forever.", "No pain, no gain."];
+    const quoteElem = document.getElementById('daily-quote');
+    if (quoteElem) {
+        quoteElem.innerText = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
+    }
+});
+
+
+const quotes = [
+  "Don't stop when you're tired. Stop when you're done.",
+  "Your body can stand almost anything. It’s your mind that you have to convince.",
+  "Discipline is doing what needs to be done, even if you don't want to do it.",
+  "The only bad workout is the one that didn't happen.",
+  "Strength does not come from winning. Your struggles develop your strengths.",
+  "Pain is temporary. Pride is forever.",
+  "Focus on the goal. The pain is just part of the process.",
+  "Success starts with self-discipline.",
+  "Hard work beats talent when talent doesn’t work hard.",
+  "Sweat is just fat crying.",
+
+  "One more rep. One step closer.",
+  "If it doesn’t challenge you, it won’t change you.",
+  "Train insane or remain the same.",
+  "Your future body is watching. Don’t disappoint it.",
+  "Strong today, stronger tomorrow.",
+  "No excuses. Just results.",
+  "The body achieves what the mind believes.",
+  "Every workout counts.",
+  "Progress, not perfection.",
+  "Make yourself proud.",
+
+  "Wake up. Work out. Repeat.",
+  "You don’t get what you wish for. You get what you work for.",
+  "The pain you feel today will be the strength you feel tomorrow.",
+  "Push yourself because no one else will.",
+  "Fall in love with taking care of your body.",
+  "Your only competition is who you were yesterday.",
+  "The grind never lies.",
+  "Strong mind. Strong body.",
+  "Results happen over time, not overnight.",
+  "Earn your body.",
+
+  "Discipline creates freedom.",
+  "Train like a beast, look like a beauty.",
+  "No shortcuts. Just hard work.",
+  "Sore today, strong tomorrow.",
+  "The work you avoid is the work you need.",
+  "Fitness is not a destination. It’s a lifestyle.",
+  "Your body hears everything your mind says.",
+  "Small steps every day lead to big results.",
+  "You are stronger than you think.",
+  "Consistency beats motivation.",
+
+  "Excuses don’t burn calories.",
+  "The last rep is where growth begins.",
+  "Hustle for that muscle.",
+  "Don’t count the reps. Make the reps count.",
+  "Sweat now, shine later.",
+  "Strong isn’t easy. It’s earned.",
+  "No pain, no progress.",
+  "Train your mind to be stronger than your feelings.",
+  "Comfort is the enemy of progress.",
+  "Build discipline. The body will follow.",
+
+  "Your health is an investment, not an expense.",
+  "Action is the real motivation.",
+  "Dream it. Train it. Achieve it.",
+  "When it burns, you’re getting closer.",
+  "You didn’t come this far to stop now.",
+  "Focus. Train. Repeat.",
+  "The bar is heavy, but your will is heavier.",
+  "Every drop of sweat is progress.",
+  "Your effort will pay off.",
+  "Strong looks good on you.",
+
+  "No limits. No excuses.",
+  "Train with purpose.",
+  "Work hard in silence. Let results speak.",
+  "You don’t find time. You make time.",
+  "The gym is where excuses die.",
+  "Sweat is proof of effort.",
+  "Your body deserves the best.",
+  "Hard work builds confidence.",
+  "Strength is built, not given.",
+  "Finish stronger than you started."
+];
+
+
+    function setRandomQuote() {
+        const quoteElement = document.getElementById('iron-quote');
+        const randomIndex = Math.floor(Math.random() * quotes.length);
+        quoteElement.innerHTML = `"${quotes[randomIndex]}"`;
+    }
+
+    // Запускаем при загрузке страницы
+    window.addEventListener('DOMContentLoaded', setRandomQuote);
+
+
+document.querySelector('form').addEventListener('submit', function(e) {
+    const btn = this.querySelector('.btn-iron-pill');
+    const btnText = btn.querySelector('.btn-text');
+    
+    // Блокируем кнопку, чтобы не нажать дважды
+    btn.style.pointerEvents = 'none';
+    btn.style.opacity = '0.7';
+    
+    // Меняем текст на анимацию загрузки
+    btnText.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> SYNCING...';
+});
+</script>
+
+
+<script>
+    function applyTheme() {
+        const theme = localStorage.getItem('user-theme') || 'dark';
+        if (theme === 'light') {
+            document.body.classList.add('light-theme');
+        } else {
+            document.body.classList.remove('light-theme');
+        }
+    }
+
+    // При загрузке
+    document.addEventListener('DOMContentLoaded', applyTheme);
+
+    // Если тема изменится в другой вкладке
+    window.addEventListener('storage', (e) => {
+        if (e.key === 'user-theme') applyTheme();
+    });
+</script><script>
+    function applyTheme() {
+        const theme = localStorage.getItem('user-theme') || 'dark';
+        if (theme === 'light') {
+            document.body.classList.add('light-theme');
+        } else {
+            document.body.classList.remove('light-theme');
+        }
+    }
+
+    // При загрузке
+    document.addEventListener('DOMContentLoaded', applyTheme);
+
+    // Если тема изменится в другой вкладке
+    window.addEventListener('storage', (e) => {
+        if (e.key === 'user-theme') applyTheme();
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,209 @@
+/* --- ПЕРЕМЕННЫЕ (Синхронизация с твоим проектом) --- */
+:root {
+    --bg-black: #050308;
+    --text-main: #ffffff;
+    --text-dim: rgba(255, 255, 255, 0.7);
+    --accent-purple: #bc77ff;
+    --glass: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --card-bg: #1a0b2e;
+    --transition-speed: 0.5s;
+}
+
+body.light-theme {
+    /* Основные цвета */
+    --bg-black: #fdfeff; /* Чистый, почти бумажный фон */
+    --text-main: #120a1d;
+    --text-dim: rgba(18, 10, 29, 0.6);
+    --accent-purple: #7c3aed;
+    --glass: rgba(124, 58, 237, 0.05); /* Легкий фиолетовый оттенок стекла */
+    --glass-border: rgba(124, 58, 237, 0.15);
+    --card-bg: #ffffff;
+
+    /* Дополнительные переменные для светлой темы */
+    --card-shadow: 0 20px 40px rgba(124, 58, 237, 0.08);
+    --dot-color: rgba(124, 58, 237, 0.1); /* Цвет точек на фоне */
+}
+
+/* Эффект точек на фоне для светлой темы (вместо пустоты) */
+body.light-theme .premium-trainers::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: radial-gradient(var(--dot-color) 1.5px, transparent 1.5px);
+    background-size: 30px 30px;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Улучшенные карточки в светлой теме */
+body.light-theme .card {
+    background: var(--card-bg);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--card-shadow);
+}
+
+/* Градиент на заголовке в светлой теме */
+body.light-theme .hero-header h1 {
+    background: linear-gradient(135deg, #120a1d 30%, var(--accent-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Оверлей на карточках в светлой теме делаем мягче */
+body.light-theme .card-overlay {
+    background: linear-gradient(to top, rgba(18, 10, 29, 0.9) 10%, transparent 70%);
+}
+
+/* Блобы (пятна) в светлой теме делаем ярче, но прозрачнее */
+body.light-theme .blob {
+    opacity: 0.2;
+    filter: blur(140px);
+}
+/* --- СЕКЦИЯ --- */
+.premium-trainers {
+    position: relative;
+    padding: 100px 5%;
+    background-color: var(--bg-black);
+    color: var(--text-main);
+    overflow: hidden;
+    transition: background-color var(--transition-speed) ease;
+}
+
+.blob {
+    position: absolute;
+    width: 400px; height: 400px;
+    background: var(--accent-purple);
+    filter: blur(120px);
+    opacity: 0.15;
+    z-index: 0;
+    border-radius: 50%;
+}
+.blob-1 { top: 10%; left: -100px; }
+.blob-2 { bottom: 10%; right: -100px; opacity: 0.1; }
+
+.container { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; }
+
+/* --- HEADER --- */
+.hero-header { margin-bottom: 60px; }
+.badge {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    padding: 8px 16px;
+    border-radius: 100px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent-purple);
+}
+.hero-header h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin: 20px 0;
+}
+.hero-header h1 span {
+    color: transparent;
+    -webkit-text-stroke: 1px var(--text-dim);
+}
+
+/* --- BENTO GRID --- */
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 300px);
+    gap: 20px;
+}
+
+.card {
+    position: relative;
+    border-radius: 32px;
+    overflow: hidden;
+    background: var(--card-bg);
+    border: 1px solid var(--glass-border);
+    transition: transform 0.3s ease-out, background var(--transition-speed) ease;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+}
+
+.card-img {
+    width: 100%; height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.card:hover .card-img { transform: scale(1.1); }
+
+.card-overlay {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 30px;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    color: #fff; /* Текст на фото всегда белый */
+}
+
+.card-main { grid-column: span 2; grid-row: span 2; }
+.card-medium { grid-column: span 2; }
+.card-small { grid-column: span 1; }
+
+.tag {
+    background: var(--accent-purple);
+    color: #000;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+/* --- КНОПКА --- */
+.btn-modern {
+    display: inline-block;
+    padding: 18px 36px;
+    background: var(--text-main);
+    color: var(--bg-black);
+    text-decoration: none;
+    border-radius: 100px;
+    font-weight: 800;
+    transition: 0.3s;
+}
+.btn-modern:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(188,119,255,0.3); }
+
+/* --- АНИМАЦИИ (Как на About) --- */
+.reveal-ov {
+    opacity: 0;
+    transform: translateY(40px) scale(0.98);
+    filter: blur(10px);
+    transition: all 1s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.reveal-ov.active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+}
+.bento-grid .card:nth-child(1) { transition-delay: 0.1s; }
+.bento-grid .card:nth-child(2) { transition-delay: 0.2s; }
+.bento-grid .card:nth-child(3) { transition-delay: 0.3s; }
+.bento-grid .card:nth-child(4) { transition-delay: 0.4s; }
+
+/* --- МОБИЛЬНАЯ ВЕРСИЯ (Горизонтальный скролл) --- */
+@media (max-width: 600px) {
+    .premium-trainers { padding: 50px 0 50px 20px; }
+    .bento-grid {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 15px;
+        padding-bottom: 20px;
+        scrollbar-width: none;
+    }
+    .bento-grid::-webkit-scrollbar { display: none; }
+    .card {
+        flex: 0 0 260px;
+        height: 350px;
+        scroll-snap-align: start;
+    }
+    .card-main, .card-medium, .card-small { width: 260px; height: 350px; }
+    .hero-header, .action-footer { padding-right: 20px; }
+}
+

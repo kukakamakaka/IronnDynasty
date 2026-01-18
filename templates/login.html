@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IronDynasty | Log In</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Переменные для темной темы (по умолчанию) */
+:root[data-theme="dark"] {
+    --accent: #a855f7;
+    --accent-glow: rgba(168, 85, 247, 0.4);
+    --bg-page: #000000;
+    --bg-panel: #050505;
+    --text-main: #ffffff;
+    --text-muted: #71717a;
+    --input-bg: #0c0c0e;
+    --border: rgba(255, 255, 255, 0.08);
+    --btn-bg: #ffffff;
+    --btn-text: #000000;
+    --step-pill-bg: rgba(255, 255, 255, 0.01);
+}
+
+/* Переменные для светлой темы */
+:root[data-theme="light"] {
+    --accent: #7c3aed; /* Чуть более насыщенный для контраста */
+    --accent-glow: rgba(124, 58, 237, 0.2);
+    --bg-page: #f4f4f5; /* Светло-серый фон */
+    --bg-panel: #ffffff; /* Белая панель */
+    --text-main: #09090b;
+    --text-muted: #52525b;
+    --input-bg: #ffffff;
+    --border: rgba(0, 0, 0, 0.1);
+    --btn-bg: #000000;
+    --btn-text: #ffffff;
+    --step-pill-bg: rgba(0, 0, 0, 0.03);
+}
+
+        body, html {
+    margin: 0; padding: 0; min-height: 100vh;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--bg-page);
+    color: var(--text-main);
+    overflow-y: auto;
+    transition: background-color 0.4s ease, color 0.4s ease; /* Добавь это */
+}
+
+        .main-wrapper {
+            display: flex;
+            height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+            gap: 60px;
+            align-items: stretch;
+        }
+
+        /* --- УЛУЧШЕННАЯ ЛЕВАЯ ПАНЕЛЬ --- */
+        .hero-side {
+    flex: 0 0 460px;
+    background: var(--bg-panel);
+    border-radius: 32px;
+    padding: 60px 45px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    /* ИЗМЕНЕНО: граница теперь адаптивная */
+    border: 1px solid var(--border);
+    box-shadow: 0 50px 100px -20px rgba(0,0,0,0.15);
+}
+
+        /* Холст для анимации частиц */
+        #particle-canvas {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Динамические градиентные облака */
+        .blob {
+            position: absolute;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            filter: blur(80px);
+            z-index: 0;
+            opacity: 0.5;
+            animation: move 20s infinite alternate;
+        }
+
+        @keyframes move {
+            from { transform: translate(-10%, -10%) scale(1); }
+            to { transform: translate(20%, 10%) scale(1.2); }
+        }
+
+        .noise-overlay {
+            position: absolute;
+            inset: 0;
+            opacity: 0.05; z-index: 2; pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        .brand, .hero-content, .footer-copy { position: relative; z-index: 5; }
+
+        .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .brand-dot { width: 8px; height: 8px; background: #fff; border-radius: 50%; box-shadow: 0 0 20px var(--accent); }
+        .brand-text { color: #fff; font-weight: 800; font-size: 18px; letter-spacing: 1px; }
+
+        .hero-content h1 {
+    font-size: 54px; font-weight: 700; line-height: 1.1;
+    letter-spacing: -2px; margin: 0 0 20px;
+    color: var(--text-main);
+}
+
+/* Контейнер: добавляем глубину для появления */
+.steps-container {
+    margin-top: 40px;
+    perspective: 1200px;
+}
+
+/* Базовая карточка: стала компактнее и изящнее */
+.step-pill {
+    background: var(--step-pill-bg);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid var(--border); /* Чтобы границы были видны на светлом фоне */    border-radius: 18px;
+    padding: 14px 22px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: var(--text-muted); /* Замените rgba(255, 255, 255, 0.2) на это */    transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Световой блик при наведении на неактивные элементы */
+.step-pill::after {
+    content: "";
+    position: absolute;
+    top: 0; left: -100%;
+    width: 50%; height: 100%;
+    /* ИЗМЕНЕНО: блик теперь подстраивается */
+    background: linear-gradient(90deg, transparent, var(--accent-glow), transparent);
+    transform: skewX(-20deg);
+    transition: 0.6s;
+}
+
+.step-pill:not(.active):hover::after {
+    left: 150%;
+}
+
+/* Эффект при наведении на неактивные шаги */
+.step-pill:not(.active):hover {
+    background: var(--step-pill-bg);
+    color: var(--text-main); /* Текст становится четче при наведении */
+    transform: translateX(8px);
+}
+
+/* --- СОСТОЯНИЕ АКТИВНОГО ШАГА (Elite Look) --- */
+.step-pill.active {
+    background: var(--accent); /* ИЗМЕНЕНО: используем основной акцент */
+    color: #ffffff; /* Всегда белый текст на ярком фоне */
+    transform: translateX(20px) scale(1.03);
+    border-color: var(--accent);
+    box-shadow: 0 15px 30px -10px var(--accent-glow);
+}
+
+/* Номер шага */
+.step-num {
+    font-weight: 800;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    padding: 4px 10px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Номер внутри активного шага */
+.active .step-num {
+    background: rgba(0, 0, 0, 0.2); /* Темная подложка для контраста */
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Текст шага */
+.step-pill span {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+    transition: 0.5s;
+}
+
+.active span {
+    letter-spacing: 1.8px;
+}
+
+/* Индикатор прогресса (тонкая линия слева) */
+.step-pill::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 0;
+    background: var(--accent);
+    transition: width 0.5s ease;
+}
+
+.active::before {
+    width: 4px;
+}
+
+/* --- АНИМАЦИИ --- */
+
+@keyframes numPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+/* Плавное появление по очереди */
+.step-pill {
+    animation: revealSteps 0.8s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+.step-pill:nth-child(1) { animation-delay: 0.2s; }
+.step-pill:nth-child(2) { animation-delay: 0.4s; }
+.step-pill:nth-child(3) { animation-delay: 0.6s; }
+
+@keyframes revealSteps {
+    from {
+        opacity: 0;
+        transform: translateY(15px) rotateX(-10deg);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) rotateX(0);
+    }
+}
+
+
+        /* --- ПРАВАЯ ПАНЕЛЬ (СОХРАНЕННАЯ СТРУКТУРА) --- */
+        .form-side { flex: 1; display: flex; justify-content: center; align-items: center; }
+        .form-container { width: 100%; max-width: 400px; animation: fadeInUp 0.8s ease; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-header h2 { font-size: 40px; font-weight: 700; letter-spacing: -1.5px; margin: 0 0 10px; }
+        .form-header p { color: var(--text-muted); font-size: 16px; margin-bottom: 35px; }
+
+        /* Стилизация Django Form {{ form.as_p }} */
+        .django-form p { margin-bottom: 20px; }
+        .django-form label {
+            font-size: 13px; font-weight: 600; color: var(--text-muted);
+            margin-bottom: 8px; display: block; margin-left: 4px;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .django-form input {
+            width: 100%; background: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px; padding: 18px;
+            color: var(--text-main); font-size: 15px;
+            box-sizing: border-box; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .django-form input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-glow);
+    background: var(--bg-panel); /* Используем переменную вместо #111 */
+}
+
+        .submit-btn {
+            width: 100%; background: var(--btn-bg); color: var(--btn-text);
+            border: none; border-radius: 16px; padding: 20px;
+            font-weight: 700; font-size: 16px; cursor: pointer;
+            margin-top: 10px; transition: 0.3s ease;
+        }
+        .submit-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        .login-link { text-align: center; margin-top: 30px; font-size: 14px; color: var(--text-muted); }
+        .login-link a { color: var(--text-main); text-decoration: none; font-weight: 700; }
+
+
+   /* Улучшенный контейнер бренда */
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+    position: relative;
+}
+
+/* Точка с эффектом "дыхания" */
+.brand-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--text-main); /* ИЗМЕНЕНО: подстраивается под тему */
+    border-radius: 50%;
+    box-shadow: 0 0 20px var(--accent);
+    animation: pulseGlow 3s infinite ease-in-out;
+}
+
+/* Текст с эффектом металлического блика */
+.brand-text {
+    /* Цвет-фоллбэк для браузеров, не поддерживающих градиент в тексте */
+    color: var(--text-main);
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    position: relative;
+
+    /* Используем var(--text-main) вместо #fff для адаптивности блеска */
+    background: linear-gradient(
+        to right,
+        var(--text-main) 20%,
+        var(--accent) 40%,
+        var(--accent) 60%,
+        var(--text-main) 80%
+    );
+
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    animation: shine 5s linear infinite;
+}
+
+/* Анимация прохождения света сквозь текст */
+@keyframes shine {
+    to {
+        background-position: 200% center;
+    }
+}
+
+/* Анимация пульсации точки */
+@keyframes pulseGlow {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 15px var(--accent);
+    }
+    50% {
+        transform: scale(1.2);
+        box-shadow: 0 0 30px var(--accent);
+    }
+}
+
+/* Эффект при наведении на весь бренд */
+.brand:hover .brand-text {
+    letter-spacing: 10px;
+    transition: 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+
+
+/* Сетка выбора ролей */
+.role-selection {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+.role-option {
+    background: var(--step-pill-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Текст роли */
+.role-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    transition: 0.4s;
+    z-index: 2;
+}
+
+/* Эффект блика при наведении */
+.role-option::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent, rgba(168, 85, 247, 0.1), transparent);
+    transform: translateX(-100%);
+    transition: 0.6s;
+}
+
+.role-option:hover::after {
+    transform: translateX(100%);
+}
+
+.role-option:hover {
+    border-color: var(--accent); /* ИЗМЕНЕНО */
+    background: var(--step-pill-bg);
+}
+
+.role-option:hover .role-name {
+    color: var(--text-main); /* ИЗМЕНЕНО */
+}
+
+/* АКТИВНОЕ СОСТОЯНИЕ (Checked) */
+.role-card input[type="radio"]:checked + .role-option {
+    background: var(--accent); /* ИЗМЕНЕНО: фиолетовый для обеих тем */
+    border-color: var(--accent);
+    box-shadow: 0 10px 30px var(--accent-glow);
+}
+
+.role-card input[type="radio"]:checked + .role-option .role-name {
+    color: #ffffff; /* Белый текст на фиолетовом фоне */
+}
+
+/* Скрываем стандартные элементы */
+.role-card input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+}
+
+.django-form p:has(select[name="role"]),
+.django-form p:has(label[for*="role"]) {
+    display: none !important;
+}
+
+
+
+
+
+/* --- ИДЕАЛЬНАЯ МОБИЛЬНАЯ АДАПТАЦИЯ --- */
+@media (max-width: 968px) {
+    body, html {
+        overflow-y: auto; /* Позволяем скроллить, если форма длинная */
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .main-wrapper {
+        flex-direction: column; /* Стек: Hero сверху, Form снизу */
+        padding: 15px;
+        gap: 30px;
+        height: auto;
+        align-items: center; /* Центрируем содержимое wrapper */
+    }
+
+    /* Верхняя карточка (Hero) */
+    .hero-side {
+        flex: none;
+        width: 100%;
+        max-width: 500px; /* Чтобы на планшетах не была слишком широкой */
+        min-height: 320px;
+        padding: 40px 25px;
+        box-sizing: border-box;
+        border-radius: 28px;
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Центрируем текст внутри */
+        text-align: center;
+    }
+
+    .hero-content h1 {
+        font-size: 34px;
+        margin-top: 15px;
+        line-height: 1.2;
+    }
+
+    .hero-content p {
+        font-size: 14px;
+        margin-bottom: 20px !important;
+    }
+
+    .steps-container {
+        display: none; /* Скрываем шаги, чтобы сразу видеть форму */
+    }
+
+    /* Секция формы */
+    .form-side {
+        width: 100%;
+        padding: 0 10px 40px;
+        display: flex;
+        justify-content: center; /* Центрируем форму горизонтально */
+    }
+
+    .form-container {
+        width: 100%;
+        max-width: 380px; /* ИДЕАЛЬНАЯ ШИРИНА: не слишком длинная, не слишком узкая */
+        margin: 0 auto;
+    }
+
+    .form-header {
+        text-align: center; /* Заголовки по центру на мобилках */
+    }
+
+    .form-header h2 {
+        font-size: 32px;
+    }
+
+    /* Кнопки ролей (для регистрации) */
+    .role-selection {
+        grid-template-columns: repeat(3, 1fr); /* Оставляем в ряд, но уменьшаем отступы */
+        gap: 8px;
+    }
+
+    .role-name {
+        font-size: 11px; /* Чуть меньше текст, чтобы влезало */
+    }
+
+    .footer-copy {
+        display: none; /* Прячем мелкий текст снизу, чтобы не мешался */
+    }
+}
+
+/* Оптимизация для самых маленьких экранов (iPhone SE и др.) */
+@media (max-width: 480px) {
+    .main-wrapper {
+        padding: 10px;
+        gap: 20px;
+    }
+
+    .hero-side {
+        padding: 30px 20px;
+        min-height: 280px;
+    }
+
+    .hero-content h1 {
+        font-size: 28px;
+    }
+
+    .form-container {
+        max-width: 320px; /* На совсем маленьких экранах делаем чуть компактнее */
+    }
+
+    .django-form input {
+        padding: 15px; /* Удобный размер для пальца */
+        font-size: 14px;
+    }
+
+    .submit-btn {
+        padding: 18px;
+    }
+
+    .role-selection {
+        grid-template-columns: 1fr; /* На очень узких экранах роли в колонку */
+    }
+}
+    </style>
+</head>
+<body>
+
+<div class="main-wrapper">
+    <div class="hero-side" id="hero-side">
+        <canvas id="particle-canvas"></canvas>
+        <div class="blob"></div>
+        <div class="noise-overlay"></div>
+
+        <a href="/" class="brand">
+            <div class="brand-dot"></div>
+            <span class="brand-text">IRON DYNASTY</span>
+        </a>
+
+        <div class="hero-content">
+            <h1>Welcome <br> Back</h1>
+            <p style="color: var(--text-muted); margin-bottom: 40px;">Join the elite community of athletes.</p>
+        </div>
+
+        <div class="footer-copy" style="font-size: 10px; color: var(--text-muted); opacity: 0.6; letter-spacing: 2px;">
+            EST. 2026 // IRON DYNASTY
+        </div>
+    </div>
+
+    <div class="form-side">
+        <div class="form-container">
+            <div class="form-header">
+                <h2>Log In</h2>
+                <p>Enter your credentials to access your account.</p>
+            </div>
+
+            <form method="POST" class="django-form">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div style="color: #ff4444; background: rgba(255, 68, 68, 0.1); padding: 12px; border-radius: 12px; margin-bottom: 20px; font-size: 14px; border: 1px solid rgba(255, 68, 68, 0.2);">
+                        {{ form.non_field_errors|striptags }}
+                    </div>
+                {% endif %}
+
+                {% for field in form %}
+                <p>
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <div style="color: #ff4444; font-size: 12px; margin-top: 5px; margin-bottom: 10px;">
+                            {{ field.errors|striptags }}
+                        </div>
+                    {% endif %}
+                </p>
+                {% endfor %}
+
+                <button type="submit" class="submit-btn">Log In</button>
+            </form>
+
+            <div class="login-link">
+                New here? <a href="{% url 'register' %}" style="color: var(--accent);">Create an account</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    // АНИМАЦИЯ ЧАСТИЦ (Neural Network Background)
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function init() {
+    // Используем getBoundingClientRect для точного замера
+    const rect = document.getElementById('hero-side').getBoundingClientRect();
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+
+    particles = [];
+    // Уменьшим количество частиц на мобилках для производительности
+    const count = window.innerWidth < 768 ? 25 : 50;
+
+    for (let i = 0; i < count; i++) {
+        particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 0.5,
+            vy: (Math.random() - 0.5) * 0.5,
+            size: Math.random() * 2
+        });
+    }
+}
+
+    function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Определяем цвета в зависимости от темы
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    ctx.fillStyle = isLight ? "rgba(124, 58, 237, 0.3)" : "rgba(168, 85, 247, 0.4)";
+    ctx.strokeStyle = isLight ? "rgba(124, 58, 237, 0.1)" : "rgba(168, 85, 247, 0.1)";
+
+    particles.forEach((p, i) => {
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+
+        for (let j = i + 1; j < particles.length; j++) {
+            let p2 = particles[j];
+            let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+            if (dist < 100) {
+                ctx.beginPath();
+                ctx.moveTo(p.x, p.y);
+                ctx.lineTo(p2.x, p2.y);
+                ctx.stroke();
+            }
+        }
+    });
+    requestAnimationFrame(animate);
+}
+
+    window.addEventListener('resize', init);
+    init();
+    animate();
+
+    // Лоадер на кнопку
+    document.querySelector('.django-form').addEventListener('submit', function() {
+        const btn = document.querySelector('.submit-btn');
+        btn.innerHTML = '<span style="opacity:0.5">Processing...</span>';
+    });
+
+
+
+
+    // Функция для применения темы
+function applyTheme() {
+    // Проверяем, сохранена ли тема в браузере, если нет — ставим темную
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+}
+
+// Запускаем при загрузке страницы
+applyTheme();
+
+// (Опционально) Если хочешь слушать изменения из других вкладок
+window.addEventListener('storage', (event) => {
+    if (event.key === 'theme') {
+        applyTheme();
+    }
+});
+
+</script>
+
+</body>
+</html>

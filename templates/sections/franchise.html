@@ -1,0 +1,669 @@
+{% load static %}
+
+<section class="franchise-stats reveal-ov">
+    <div class="top-divider"></div>
+
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    
+    <div class="container stats-wrapper">
+        <div class="stats-header reveal-item">
+            <span class="badge">Business model</span>
+            <h2 class="stats-title">GYM IS LOADED WITH THE <span>LATEST EQUIPMENTS.</span></h2>
+        </div>
+
+        <div class="stats-content">
+<div class="stats-text reveal-item">
+    <p>We've created a system that delivers results. Our rooms are equipped with the latest technology, and our business processes are honed to the point of automation.</p>
+                <p>By becoming part of our network, you gain access to marketing and management technologies that guarantee sustainable growth.</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card clickable-stat reveal-item" title="Нажми, чтобы перезапустить">
+                    <div class="stat-number">
+                        <span class="counter" data-target="10">0</span>X
+                    </div>
+                    <p class="stat-label">ROI on google ads spend</p>
+                </div>
+
+                <div class="stat-card clickable-stat" title="Нажми, чтобы перезапустить">
+                    <div class="stat-number">
+                        <span class="counter" data-target="20">0</span>K+
+                    </div>
+                    <p class="stat-label">Made each month over year</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<div id="programs-section" class="container programs-inline-section">    <div class="programs-header-centered reveal-item">
+        <span class="badge badge-outline">Training levels</span>
+        <h2 class="programs-main-title">PROGRAMS BUILT <span>FOR RESULTS</span></h2>
+        <div class="title-separator"></div>
+    </div>
+
+    <div class="programs-list-clean">
+        <div class="prog-item reveal-item">
+            <div class="prog-left">
+                <span class="prog-index">01</span>
+                <div class="prog-info">
+                    <h3 class="prog-name">Strength & Iron</h3>
+                    <p class="prog-desc">Compound lifts and raw power development for maximum gains.</p>
+                </div>
+            </div>
+            <div class="prog-tag">Hardcore</div>
+        </div>
+
+        <div class="prog-item reveal-item">
+            <div class="prog-left">
+                <span class="prog-index">02</span>
+                <div class="prog-info">
+                    <h3 class="prog-name">HIIT Intensity</h3>
+                    <p class="prog-desc">Explosive cardio sessions to burn fat and increase endurance.</p>
+                </div>
+            </div>
+            <div class="prog-tag">Intensive</div>
+        </div>
+
+        <div class="prog-item reveal-item">
+            <div class="prog-left">
+                <span class="prog-index">03</span>
+                <div class="prog-info">
+                    <h3 class="prog-name">Flex & Recovery</h3>
+                    <p class="prog-desc">Deep stretching and mobility work for injury prevention.</p>
+                </div>
+            </div>
+            <div class="prog-tag">Mind & Body</div>
+        </div>
+    </div>
+</div>
+   
+</section>
+
+<style>
+    /* ============================================================
+   FRANCHIZE
+   ============================================================ */
+
+/* --- ПЕРЕМЕННЫЕ И ОСНОВА --- */
+.franchise-stats {
+    position: relative;
+    padding: 50px 5%;
+    /* Используем currentColor или жесткий фон, чтобы перекрыть стык */
+    background-color: var(--bg-black);
+    color: var(--text-main);
+    overflow: visible; /* Позволяем градиенту выходить за границы */
+    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+}
+
+/* ЭЛЕМЕНТ ДЛЯ СКРЫТИЯ ГРАНИЦЫ */
+.top-divider {
+    position: absolute;
+    top: -50px; /* Выходит немного вверх на прошлую секцию */
+    left: 0;
+    width: 100%;
+    height: 100px;
+    /* Создает мягкую растяжку цвета, скрывая резкий переход */
+    background: linear-gradient(to bottom, transparent, var(--bg-black) 50%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.stats-wrapper {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* --- ТИПОГРАФИКА --- */
+.stats-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 900;
+    line-height: 0.95;
+    text-transform: uppercase;
+    font-style: italic;
+    letter-spacing: -2px;
+    margin-top: 25px;
+}
+
+.stats-title span {
+    display: block;
+    color: var(--text-dim);
+}
+
+.stats-text {
+    margin-bottom: 50px;
+}
+
+.stats-text p {
+    color: var(--text-dim);
+    font-size: 1.15rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* --- СЕТКА И КАРТОЧКИ --- */
+.stats-grid {
+    display: flex;
+    gap: 70px;
+    border-top: 1px solid var(--glass-border);
+    padding-top: 40px;
+}
+
+.stat-card {
+    transition: transform 0.3s ease;
+}
+
+.clickable-stat {
+    cursor: pointer;
+    user-select: none;
+}
+
+.clickable-stat:hover {
+    transform: translateY(-5px);
+}
+
+.clickable-stat:active {
+    transform: scale(0.95);
+}
+
+.stat-number {
+    font-size: clamp(3.5rem, 6vw, 5.5rem);
+    font-weight: 900;
+    font-style: italic;
+    color: var(--accent-purple);
+    line-height: 1;
+    margin-bottom: 12px;
+    letter-spacing: -3px;
+}
+
+.stat-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-dim);
+    font-weight: 700;
+    max-width: 150px;
+}
+
+/* --- БЛОБЫ --- */
+.blob {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: var(--accent-purple);
+    filter: blur(150px);
+    opacity: 0.12;
+    z-index: 1;
+    border-radius: 50%;
+}
+.blob-1 { top: -10%; left: -10%; }
+.blob-2 { bottom: -10%; right: -5%; opacity: 0.08; }
+
+/* --- КЛАССНЫЙ МОБИЛЬНЫЙ АДАПТИВ --- */
+
+/* Планшеты и небольшие ноутбуки */
+@media (max-width: 1024px) {
+    .franchise-stats {
+        padding: 80px 5%;
+    }
+    
+    .stats-wrapper {
+        grid-template-columns: 1fr; /* Переход в одну колонку */
+        gap: 40px;
+    }
+
+    .stats-title {
+        font-size: 3rem;
+        max-width: 100%;
+    }
+
+    .stats-text {
+        margin-bottom: 30px;
+    }
+}
+/* ============================================================
+   MIBILE ADAPTIVITY-FRANCHIZE
+   ============================================================ */
+
+/* Смартфоны */
+@media (max-width: 600px) {
+    .franchise-stats {
+        /* Увеличиваем отступ сверху, чтобы контент не лез на тренеров */
+        padding-top: 80px; 
+        padding-bottom: 60px;
+        margin-top: -1px; /* Склеиваем секции */
+        overflow: visible; 
+    }
+
+    .top-divider {
+        /* Сдвигаем градиент так, чтобы он маскировал только стык, не закрывая лица */
+        top: -30px; 
+        height: 60px; 
+        background: linear-gradient(to bottom, 
+            transparent, 
+            var(--bg-black) 90%
+        );
+        z-index: 1; /* Опускаем ПОД карточки тренеров */
+        display: block;
+    }
+
+    .stats-header {
+        margin-bottom: 25px;
+    }
+
+    /* Агрессивный заголовок */
+    .stats-title {
+        font-size: 2.2rem;
+        letter-spacing: -1.5px;
+        line-height: 0.95;
+    }
+
+    .stats-title span {
+        margin-top: 4px;
+    }
+
+    .stats-text p {
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin-bottom: 12px;
+    }
+
+    /* Сетка статистики: 2 колонки в ряд */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr; 
+        gap: 20px;
+        padding-top: 25px;
+        border-top: 1px solid var(--glass-border);
+    }
+
+    /* Крупные цифры для мобилок */
+    .stat-number {
+        font-size: 2.4rem; 
+        letter-spacing: -1.5px;
+        margin-bottom: 4px;
+    }
+
+    .stat-label {
+        font-size: 9px;
+        line-height: 1.2;
+        color: var(--text-dim);
+        text-transform: uppercase;
+        font-weight: 800;
+        max-width: 100%; /* Позволяем тексту занимать всю ширину колонки */
+    }
+
+    /* Деликатные фоновые пятна */
+    .blob {
+        width: 180px;
+        height: 180px;
+        opacity: 0.06;
+        filter: blur(80px);
+    }
+}
+
+/* Совсем маленькие экраны (iPhone SE и т.д.) */
+@media (max-width: 380px) {
+    .stats-title {
+        font-size: 1.8rem;
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+    }
+}
+
+
+/* Начальное состояние элементов (спрятаны) */
+.reveal-item {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), 
+                transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Состояние, когда секция в зоне видимости */
+.franchise-stats.active .reveal-item {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Очередность (каскад): заголовок -> текст -> цифры */
+.franchise-stats.active .stats-header { transition-delay: 0.1s; }
+.franchise-stats.active .stats-text   { transition-delay: 0.2s; }
+.franchise-stats.active .stat-card:nth-child(1) { transition-delay: 0.4s; }
+.franchise-stats.active .stat-card:nth-child(2) { transition-delay: 0.5s; }
+
+
+/* ============================================================
+   PROGRAMS
+   ============================================================ */
+
+/* Дизайн блока программ */
+.programs-inline-section {
+    margin-top: 80px; /* Отступ от цифр статистики */
+    padding-top: 60px;
+    border-top: 1px solid var(--glass-border);
+    position: relative;
+    z-index: 2;
+}
+
+.prog-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.prog-left {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+.prog-index {
+    color: var(--accent-purple);
+    font-weight: 900;
+    font-style: italic;
+    font-size: 1.2rem;
+    opacity: 0.5;
+}
+
+.prog-name {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    font-style: italic;
+    margin: 0;
+}
+
+.prog-desc {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    margin-top: 5px;
+}
+
+.prog-tag {
+    font-size: 10px;
+    text-transform: uppercase;
+    border: 1px solid var(--glass-border);
+    padding: 6px 15px;
+    border-radius: 4px;
+    font-weight: 800;
+}
+
+/* Задержки появления для строк программ (чтобы вылетали по очереди) */
+.franchise-stats.active .prog-item:nth-child(1) { transition-delay: 0.6s; }
+.franchise-stats.active .prog-item:nth-child(2) { transition-delay: 0.7s; }
+.franchise-stats.active .prog-item:nth-child(3) { transition-delay: 0.8s; }
+
+
+/* Центрированный заголовок программ */
+.programs-header-centered {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 80px; /* Больше пространства */
+}
+
+/* Измененный шрифт для контраста */
+.programs-main-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    font-style: italic;
+    line-height: 1;
+    margin-top: 20px;
+    letter-spacing: -1px;
+}
+
+/* Эффект контурного текста, адаптивный под тему */
+.programs-main-title span {
+    display: block;
+    color: transparent;
+    /* Используем переменную основного текста для контура */
+    -webkit-text-stroke: 1px var(--text-main); 
+    /* Добавляем небольшую прозрачность контуру, чтобы не был слишком жирным */
+    opacity: 0.5;
+    margin-top: 5px;
+}
+
+/* Фиолетовая полоска-разделитель */
+.title-separator {
+    width: 60px;
+    height: 4px;
+    background: var(--accent-purple);
+    margin-top: 25px;
+    border-radius: 2px;
+}
+
+/* Прозрачный бейдж */
+.badge-outline {
+    background: transparent !important;
+    border: 1px solid var(--accent-purple);
+    color: var(--accent-purple) !important;
+}
+
+/* Обновление строк списка */
+.prog-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+/* Эффект при наведении на строку */
+.prog-item:hover {
+    transform: translateX(10px);
+    background: linear-gradient(90deg, rgba(168, 85, 247, 0.05) 0%, transparent 100%);
+}
+/* ============================================================
+   MOBILE ADAPTIVITY-PROGRAMS
+   ============================================================ */
+
+
+@media (max-width: 600px) {
+    .programs-inline-section {
+        margin-top: 40px;
+        padding: 40px 15px;
+        /* Убираем верхнюю линию, так как карточки сами создают объем */
+        border-top: none; 
+    }
+
+    .programs-header-centered {
+        margin-bottom: 30px;
+    }
+
+    .programs-main-title {
+        font-size: 1.6rem;
+    }
+
+    /* Контейнер для карточек */
+    .programs-list-clean {
+        display: flex;
+        flex-direction: column;
+        gap: 16px; /* Расстояние между карточками */
+    }
+
+    .prog-item {
+        background: rgba(255, 255, 255, 0.03); /* Очень легкий фон */
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        padding: 20px;
+        border-radius: 16px;
+        display: block; /* Сбрасываем flex */
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    /* Эффект при нажатии */
+    .prog-item:active {
+        transform: scale(0.98);
+        background: rgba(168, 85, 247, 0.08);
+    }
+
+    .prog-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 8px;
+    }
+
+    .prog-index {
+        font-size: 0.8rem;
+        font-weight: 900;
+        background: rgba(168, 85, 247, 0.15);
+        color: var(--accent-purple);
+        padding: 4px 8px;
+        border-radius: 6px;
+        margin-top: 0;
+    }
+
+    .prog-name {
+        font-size: 1.15rem;
+        margin: 0;
+        font-style: italic;
+    }
+
+    .prog-desc {
+        font-size: 0.85rem;
+        line-height: 1.4;
+        /* Используем переменную текста темы, но чуть приглушаем её */
+        color: var(--text-main);
+        opacity: 0.7; 
+        margin: 0;
+        padding-left: 2px;
+    }
+
+    .prog-tag {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        margin-top: 0;
+        font-size: 7px;
+        letter-spacing: 1px;
+        border-color: rgba(168, 85, 247, 0.4);
+        padding: 2px 6px;
+    }
+
+    /* Полоска активности теперь снизу карточки */
+    .prog-item::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: var(--accent-purple);
+        opacity: 0;
+        transform: scaleX(0);
+        transition: 0.4s ease;
+    }
+
+    .franchise-stats.active .prog-item::before {
+        opacity: 0.6;
+        transform: scaleX(1);
+    }
+
+    /* Ускоренная анимация появления */
+    .reveal-item {
+        transform: translateY(15px);
+        transition: all 0.5s ease !important;
+    }
+}
+
+
+
+
+
+
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, { 
+        threshold: 0.05, // Срабатывает, когда показалось всего 5% секции
+        rootMargin: '0px 0px -50px 0px' // Начинает анимацию чуть заранее
+    });
+
+    document.querySelectorAll('.reveal-ov').forEach(el => revealObserver.observe(el));
+
+    const animateCounter = (el) => {
+    const target = +el.getAttribute('data-target');
+    const sound = document.getElementById('counter-sound');
+    const duration = 1000; 
+    const frameRate = 1000 / 60; 
+    const totalFrames = Math.round(duration / frameRate);
+    let currentFrame = 0;
+    let lastValue = 0; // Чтобы следить за изменением числа
+
+    el.innerText = "0";
+
+    const counterInterval = setInterval(() => {
+        currentFrame++;
+        const progress = currentFrame / totalFrames;
+        const currentValue = Math.round(target * progress);
+
+        if (currentFrame <= totalFrames) {
+            if (currentValue !== lastValue) {
+                // Число изменилось — щелкаем!
+                if (sound) {
+                    sound.currentTime = 0; // Сброс в начало для частого срабатывания
+                    sound.volume = 0.2;    // Делаем чуть тише, чтобы не "било" по ушам
+                    sound.play().catch(() => {}); 
+                }
+                el.innerText = currentValue;
+                lastValue = currentValue;
+            }
+        } else {
+            el.innerText = target;
+            clearInterval(counterInterval);
+        }
+    }, frameRate);
+};
+
+    const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const counter = entry.target.querySelector('.counter');
+                
+                // На мобилках (экран < 600px) задержка 300мс, на ПК — 600мс
+                const delay = window.innerWidth < 600 ? 300 : 600;
+                
+                setTimeout(() => {
+                    if (counter) animateCounter(counter);
+                }, delay); 
+                
+                counterObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 }); // Уменьшили с 0.5 до 0.1 для надежности
+
+    document.querySelectorAll('.stat-card').forEach(card => counterObserver.observe(card));
+
+    document.querySelectorAll('.clickable-stat').forEach(card => {
+        card.addEventListener('click', () => {
+            const counter = card.querySelector('.counter');
+            if (counter) animateCounter(counter);
+        });
+    });
+});
+</script>
+
+<audio id="counter-sound" src="{% static 'sounds/counter.mp3' %}" preload="auto"></audio>
+

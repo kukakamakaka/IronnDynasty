@@ -1,0 +1,360 @@
+{% load static %}
+
+<section class="premium-trainers-clean" id="trainers-section">
+    
+    <div class="chroma-scroll-wrapper">
+    <div class="chroma-scroll-container" id="scrollContainer">
+        
+        
+        
+        
+        
+        <div class="chroma-grid" id="chromaGrid">
+    {% for trainer in trainers %}
+        <article class="chroma-card">
+            <div class="poster">
+                {% if trainer.profile.avatar %}
+<img src="{{ trainer.profile.avatar.url }}" alt="Coach {{ trainer.profile.user.username }}">                {% else %}
+                    <img src="{% static 'images/default-trainer.jpg' %}" alt="Trainer">
+                {% endif %}
+            </div>
+            <div class="details">
+                <h1>{{ trainer.profile.user.username }}</h1>
+                <h2>{{ trainer.specialization }}</h2>
+                
+                <div class="rating">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    <span>{{ trainer.rating|default:"5.0" }}</span>
+                </div>
+
+                <div class="tags">
+                    <span class="tag">{{ trainer.experience_years }} Years Exp</span>
+                    <span class="tag">{{ trainer.tags }}</span>
+                </div>
+                
+                <p class="desc">{{ trainer.bio }}</p>
+            </div>
+        </article>
+    {% empty %}
+        <div style="color: white; padding: 40px; text-align: center; width: 100%;">
+            <p>Our trainers are getting ready. Check back soon!</p>
+        </div>
+    {% endfor %}
+
+    <div class="chroma-overlay"></div>
+</div>
+        
+        
+        
+        
+        
+        
+    </div>
+    <div class="scroll-progress-container">
+        <div class="scroll-progress-bar" id="scrollBar"></div>
+    </div>
+</div>
+
+</section>
+
+<style>
+    .chroma-card {
+    will-change: transform, opacity;
+}
+    :root {
+        --x: 50%; --y: 50%; --r: 300px;
+        --accent-primary: #9d50bb;
+        --text-gradient: linear-gradient(135deg, #9d50bb 0%, #6e48aa 100%);
+
+        /* DARK THEME (по умолчанию) */
+        --bg-section: #08050a;
+        --text-main: #ffffff;
+        --text-muted: rgba(255, 255, 255, 0.71);
+        --poster-grad: linear-gradient(to top, #0a0a0a 0%, rgba(10,10,10,0.5) 40%, transparent 100%);
+--overlay-color: rgba(0, 0, 0, 0.25); /* Стало намного светлее */        --tag-bg: rgba(157, 80, 187, 0.2);
+        --progress-track: rgba(255, 255, 255, 0.1);
+    }
+
+    /* LIGHT THEME (активируется классом light-theme на body или section) */
+    body.light-theme, .light-theme {
+        --bg-section: rgba(39, 41, 62, 0.16); /* Мягкий светлый фон */
+        --text-main: #0c0c0c;
+        --text-muted: rgba(19, 19, 19, 0.75);
+        /* Градиент уходит в светлый цвет фона */
+--poster-grad: linear-gradient(to top, #f8f9fa 0%, rgba(248, 249, 250, 0.01) 40%, transparent 100%);        --overlay-color: rgba(157, 80, 187, 0.05); /* Едва заметный фиолетовый отсвет */
+        --tag-bg: rgba(157, 80, 187, 0.1);
+        --progress-track: rgba(0, 0, 0, 0.1);
+    }
+
+    .premium-trainers-clean {
+        background: var(--bg-section) !important;
+        padding: 100px 0;
+        margin: 0;
+        font-family: 'Inter', sans-serif;
+        overflow: hidden;
+        transition: background 0.4s ease; /* Плавный переход при смене темы */
+    }
+
+    .chroma-scroll-container {
+        padding: 40px 0;
+        background: transparent;
+        overflow-x: auto;
+        display: flex;
+        scrollbar-width: none;
+        scroll-behavior: smooth;
+        scroll-snap-type: x mandatory;
+        scroll-padding: 0 10vw;
+    }
+    .chroma-scroll-container::-webkit-scrollbar { display: none; }
+
+    .chroma-grid {
+        display: flex;
+        gap: 40px;
+        padding: 0 10vw;
+        align-items: flex-start;
+        background: transparent;
+    }
+
+    .chroma-card {
+        position: relative;
+        flex: 0 0 340px;
+        height: 500px;
+        background: none !important;
+        border: none !important;
+        scroll-snap-align: start;
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .chroma-card.reveal { opacity: 1; transform: translateY(0); }
+
+    .poster {
+        position: absolute;
+        inset: 0;
+        border-radius: 28px;
+        overflow: hidden;
+        z-index: 1;
+    }
+
+    .poster::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: var(--poster-grad);
+        z-index: 2;
+        transition: background 0.4s ease;
+    }
+
+    .poster img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .details {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 30px;
+        z-index: 3;
+        color: var(--text-main);
+        transform: translateY(20px);
+        transition: transform 0.4s ease, color 0.4s ease;
+    }
+
+    .chroma-card:hover { transform: translateY(-10px); }
+
+    .details h1 { font-size: 1.6rem; font-weight: 800; margin: 0; }
+    .details h2 { font-size: 0.85rem; color: var(--accent-primary); margin: 5px 0 12px; font-weight: 600; }
+
+    .rating { color: #ffb800; display: flex; gap: 4px; margin-bottom: 15px; align-items: center; }
+    .rating span { color: var(--text-main); margin-left: 5px; font-weight: bold; font-size: 0.9rem; }
+
+    .tags { display: flex; gap: 8px; flex-wrap: wrap; }
+    .tag {
+        background: var(--tag-bg);
+        color: var(--accent-primary);
+        padding: 5px 12px;
+        border-radius: 10px;
+        font-size: 0.7rem;
+        border: 1px solid rgba(157, 80, 187, 0.3);
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    .desc {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        margin-top: 15px;
+        opacity: 0;
+        transition: 0.3s;
+    }
+    .chroma-card:hover .desc { opacity: 1; }
+
+    .chroma-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background: var(--overlay-color);
+    
+    /* ДОБАВЬТЕ ЭТУ СТРОКУ: */
+    mix-blend-mode: multiply; /* Это заставит тень ложиться только на фон, не задевая фото */
+    
+    mask-image: radial-gradient(circle var(--r) at var(--x) var(--y), transparent 0%, black 80%);
+    -webkit-mask-image: radial-gradient(circle var(--r) at var(--x) var(--y), transparent 0%, black 80%);
+}
+
+    .scroll-progress-container {
+        width: 200px; height: 2px; background: var(--progress-track);
+        margin: 40px auto 0; border-radius: 4px;
+    }
+    .scroll-progress-bar { width: 0%; height: 100%; background: var(--text-gradient); }
+
+   @media (max-width: 768px) {
+    /* Основная секция: уменьшаем вертикальные отступы, чтобы секция не была слишком огромной */
+    .premium-trainers-clean {
+        padding: 40px 0;
+    }
+
+    /* Контейнер скролла: уменьшаем область под карточками */
+    .chroma-scroll-container {
+        padding: 20px 0 30px;
+    }
+
+    /* Сетка: уменьшаем расстояние между карточками */
+    .chroma-grid {
+        padding: 0 10vw;
+        gap: 15px;
+    }
+
+    /* КАРТОЧКА: устанавливаем вашу высоту 350px */
+    .chroma-card {
+        flex: 0 0 280px; /* Немного сужаем ширину, чтобы высота 350 смотрелась пропорционально */
+        height: 350px !important;
+        border-radius: 20px; /* Чуть меньше скругление для маленьких карточек */
+    }
+
+    /* Постер: скругление должно совпадать с карточкой */
+    .poster {
+        border-radius: 20px;
+    }
+
+    /* ДЕТАЛИ: адаптируем текст под малую высоту */
+    .details {
+        transform: translateY(0); /* Текст виден сразу */
+        padding: 15px 20px; /* Уменьшенные отступы внутри */
+    }
+
+    /* Уменьшаем шрифты, чтобы всё влезло в 350px */
+    .details h1 {
+        font-size: 1.25rem; /* Было 1.6 */
+        line-height: 1.2;
+    }
+
+    .details h2 {
+        font-size: 0.75rem; /* Было 0.85 */
+        margin: 3px 0 8px;
+    }
+
+    /* Рейтинг и теги */
+    .rating {
+        margin-bottom: 8px;
+        font-size: 0.75rem;
+    }
+
+    .rating i {
+        font-size: 0.7rem;
+    }
+
+    .tag {
+        padding: 3px 8px;
+        font-size: 0.6rem;
+        border-radius: 6px;
+    }
+
+    /* Описание: при высоте 350px лучше скрыть или сильно ограничить */
+    .desc {
+        display: none; /* Скрываем описание на мобилках, чтобы не закрывать лицо тренера */
+    }
+
+    /* Фонарик отключаем для производительности */
+    .chroma-overlay {
+        display: none;
+    }
+
+    /* Индикатор прогресса чуть тоньше */
+    .scroll-progress-container {
+        width: 120px;
+        margin-top: 20px;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const container = document.getElementById('scrollContainer');
+    const cards = document.querySelectorAll('.chroma-card');
+    const progressBar = document.getElementById('scrollBar');
+    const grid = document.getElementById('chromaGrid');
+
+    // 1. Анимация появления при скролле
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('reveal');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    cards.forEach(card => revealObserver.observe(card));
+
+    // 2. Эффект фонарика (Desktop)
+    if (window.innerWidth > 768) {
+        window.addEventListener('mousemove', (e) => {
+            const rect = grid.getBoundingClientRect();
+            gsap.to(document.documentElement, {
+                '--x': `${e.clientX - rect.left}px`,
+                '--y': `${e.clientY - rect.top}px`,
+                duration: 0.6,
+                ease: "power2.out"
+            });
+        });
+    }
+
+    // 3. Индикатор прогресса
+    container.addEventListener('scroll', () => {
+        const maxScroll = container.scrollWidth - container.clientWidth;
+        const percentage = (container.scrollLeft / maxScroll) * 100;
+        progressBar.style.width = `${percentage}%`;
+    });
+
+    // 4. Drag Scroll (Мышь)
+    let isDown = false; let startX; let scrollLeft;
+
+    container.addEventListener('mousedown', (e) => {
+        isDown = true;
+        container.style.scrollSnapType = 'none';
+        startX = e.pageX - container.offsetLeft;
+        scrollLeft = container.scrollLeft;
+        container.style.cursor = 'grabbing';
+    });
+
+    container.addEventListener('mouseleave', () => isDown = false);
+    container.addEventListener('mouseup', () => {
+        isDown = false;
+        container.style.scrollSnapType = 'x mandatory';
+        container.style.cursor = 'grab';
+    });
+
+    container.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - container.offsetLeft;
+        const walk = (x - startX) * 2;
+        container.scrollLeft = scrollLeft - walk;
+    });
+});
+</script>

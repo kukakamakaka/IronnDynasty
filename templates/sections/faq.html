@@ -1,0 +1,296 @@
+<section class="dynasty-faq-refined" id="faq-section">
+    <div class="faq-container">
+        <div class="faq-badge-wrapper">
+            <div class="faq-badge">
+                <span class="dot"></span>
+                <span class="badge-text">IRONN DYNASTY KNOWLEDGE</span>
+            </div>
+        </div>
+
+        <div class="faq-hero-text">
+            <h1 class="title-main">ANY <span>QUESTIONS?</span></h1>
+            <h2 class="title-italic">YOUR JOURNEY</h2>
+        </div>
+
+        <div class="faq-grid">
+            <div class="faq-card-premium">
+                <div class="faq-card-header">
+                    <div class="faq-info">
+                        <span class="faq-index">01</span>
+                        <h3 class="faq-q-title">How to join the Elite Rank?</h3>
+                    </div>
+                    <div class="faq-chevron"><svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></div>
+                </div>
+                <div class="faq-card-body">
+                    <div class="faq-inner-content">
+                        <p>Complete your registration and start any "Dynasty Program". Your rank increases with every workout tracked and challenge completed.</p>
+                        <a href="{% url 'register' %}" class="btn-minimal">GET STARTED →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-card-premium">
+                <div class="faq-card-header">
+                    <div class="faq-info">
+                        <span class="faq-index">02</span>
+                        <h3 class="faq-q-title">Is the app available on mobile?</h3>
+                    </div>
+                    <div class="faq-chevron"><svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></div>
+                </div>
+                <div class="faq-card-body">
+                    <div class="faq-inner-content">
+                        <p>The Ironn Dynasty works as a PWA. Simply open the site in Safari or Chrome and select "Add to Home Screen" for a full app experience.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-card-premium">
+                <div class="faq-card-header">
+                    <div class="faq-info">
+                        <span class="faq-index">03</span>
+                        <h3 class="faq-q-title">Personalized nutrition plans?</h3>
+                    </div>
+                    <div class="faq-chevron"><svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></div>
+                </div>
+                <div class="faq-card-body">
+                    <div class="faq-inner-content">
+                        <p>Every program includes a macro-calculator and meal timing guide tailored to your specific metabolic rate and goals.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-card-premium">
+                <div class="faq-card-header">
+                    <div class="faq-info">
+                        <span class="faq-index">04</span>
+                        <h3 class="faq-q-title">Can I freeze my membership?</h3>
+                    </div>
+                    <div class="faq-chevron"><svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></div>
+                </div>
+                <div class="faq-card-body">
+                    <div class="faq-inner-content">
+                        <p>Yes, Elite members can freeze their account for up to 30 days per year through the "Billing" section in the Dashboard.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-card-premium">
+                <div class="faq-card-header">
+                    <div class="faq-info">
+                        <span class="faq-index">05</span>
+                        <h3 class="faq-q-title">What equipment do I need?</h3>
+                    </div>
+                    <div class="faq-chevron"><svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></div>
+                </div>
+                <div class="faq-card-body">
+                    <div class="faq-inner-content">
+                        <p>We have programs for everything: from full gym equipment to "Bodyweight Only" tracks that you can do anywhere, anytime.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;600;800&display=swap');
+
+        /* Обнуляем внешний отступ самого первого элемента, чтобы он не толкал секцию вверх */
+.faq-badge-wrapper {
+    margin-top: 0 !important;
+}
+        .dynasty-faq-refined {
+    padding-top: 10px;      /* Минимальный отступ от верхней секции */
+    padding-bottom: 80px;   /* Оставляем комфортный отступ до следующей секции */
+    padding-inline: 5%;     /* Отступы по бокам (слева и справа) */
+    
+    background: var(--bg-dark);
+    font-family: 'Inter', sans-serif;
+    color: var(--text);
+}
+
+        .faq-container { max-width: 800px; margin: 0 auto; }
+
+        .faq-badge-wrapper { display: flex; justify-content: center; margin-bottom: 20px; }
+        .faq-badge {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            padding: 6px 16px;
+            border-radius: 100px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .faq-badge .dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 8px var(--accent); }
+        .faq-badge .badge-text { font-size: 0.65rem; font-weight: 800; letter-spacing: 1.5px; opacity: 0.7; text-transform: uppercase; }
+
+        .faq-hero-text { text-align: center; margin-bottom: 50px; }
+        
+        .title-main {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            line-height: 1;
+            margin: 0;
+            text-transform: uppercase;
+        }
+        
+        .title-main span {
+            background: linear-gradient(to right, var(--accent), #d8b4fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .title-italic {
+            font-family: 'Archivo Black', sans-serif;
+            font-style: italic;
+            font-size: clamp(1.8rem, 4.5vw, 3rem);
+            line-height: 1;
+            margin-top: 0px;
+            text-transform: uppercase;
+            color: var(--text);
+            opacity: 0.9;
+        }
+
+        .faq-grid { display: flex; flex-direction: column; gap: 12px; }
+
+        .faq-card-premium {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            transition: all 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+            cursor: pointer;
+        }
+
+        .faq-card-premium:hover {
+            border-color: rgba(168, 85, 247, 0.5);
+            background: rgba(168, 85, 247, 0.02);
+        }
+
+        .faq-card-header {
+            padding: 24px 30px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .faq-info { display: flex; align-items: center; gap: 20px; }
+        .faq-index {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 1rem;
+            color: var(--accent);
+            opacity: 0.3;
+        }
+
+        .faq-q-title {
+            font-size: 1.05rem; font-weight: 700; margin: 0;
+            text-transform: uppercase; letter-spacing: -0.2px;
+        }
+
+        .faq-chevron {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: var(--glass);
+            display: flex; align-items: center; justify-content: center;
+            transition: 0.4s ease;
+        }
+        .faq-chevron svg { width: 18px; color: var(--text); }
+
+        .faq-card-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .faq-inner-content { padding: 0 30px 24px 60px; }
+        .faq-inner-content p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .btn-minimal {
+            display: inline-block;
+            margin-top: 15px;
+            font-weight: 800;
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+        }
+
+        /* Active State */
+        .faq-card-premium.active {
+            background: var(--card-bg);
+            border-color: var(--accent);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        .faq-card-premium.active .faq-card-body { max-height: 300px; }
+        .faq-card-premium.active .faq-chevron { background: var(--accent); transform: rotate(180deg); }
+        .faq-card-premium.active .faq-chevron svg { color: white; }
+        .faq-card-premium.active .faq-index { opacity: 1; }
+
+        @media (max-width: 768px) {
+    /* Уменьшаем общие отступы секции для мобилок */
+    .dynasty-faq-refined {
+        padding-top: 5px; /* Еще плотнее к верху */
+        padding-bottom: 50px;
+    }
+
+    /* Масштабируем заголовок, чтобы он не занимал весь экран */
+    .title-main { font-size: 2.2rem; }
+    .title-italic { font-size: 1.8rem; }
+
+    /* Оптимизация карточек */
+    .faq-card-header {
+        padding: 18px 20px; /* Удобный размер для тапа пальцем */
+        gap: 12px;
+    }
+
+    .faq-info { gap: 12px; }
+
+    .faq-index {
+        font-size: 0.85rem; /* Делаем индекс чуть скромнее */
+    }
+
+    .faq-q-title {
+        font-size: 0.9rem;
+        line-height: 1.3;
+        flex: 1; /* Позволяет тексту занимать все пространство */
+    }
+
+    /* Уменьшаем кнопку-шеврон, чтобы она не перетягивала внимание */
+    .faq-chevron {
+        width: 32px;
+        height: 32px;
+        flex-shrink: 0; /* Чтобы круг не сплющивался при длинном вопросе */
+    }
+
+    /* Контент ответа */
+    .faq-inner-content {
+        padding: 0 20px 20px 45px; /* Выравниваем текст под началом вопроса */
+    }
+
+    .faq-inner-content p {
+        font-size: 0.85rem; /* Более читабельно для мелких экранов */
+        opacity: 0.8;
+    }
+
+    .btn-minimal {
+        margin-top: 12px;
+        font-size: 0.7rem;
+    }
+}
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const faqCards = document.querySelectorAll('.faq-card-premium');
+            faqCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const isActive = card.classList.contains('active');
+                    faqCards.forEach(c => c.classList.remove('active'));
+                    if (!isActive) {
+                        card.classList.add('active');
+                        if (window.navigator.vibrate) window.navigator.vibrate(10);
+                    }
+                });
+            });
+        });
+    </script>
+</section>

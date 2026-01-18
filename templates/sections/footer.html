@@ -1,0 +1,397 @@
+{% load static %}
+
+<footer id="ironn-ultimate-footer">
+    <div class="f-noise-layer"></div>
+    <div class="f-glow-core"></div>
+    
+    <div class="f-ticker-wrap">
+        <div class="f-ticker">
+            <span>ELITE PERFORMANCE • DIGITAL EVOLUTION • IRONN DYNASTY • NO LIMITS • SMART TRAINING • ASTANA HQ • ELITE PERFORMANCE • DIGITAL EVOLUTION • IRONN DYNASTY • NO LIMITS • SMART TRAINING • ASTANA HQ</span>
+        </div>
+    </div>
+
+    <div class="f-container">
+        <div class="f-radar-grid">
+            <div class="radar-item">
+                <div class="radar-circle"><div class="wave"></div></div>
+                <div class="radar-info">
+                    <span class="r-num">1500+</span>
+                    <span class="r-label">ACTIVE UNITS</span>
+                </div>
+            </div>
+            <div class="radar-item">
+                <div class="radar-circle"><div class="wave"></div></div>
+                <div class="radar-info">
+                    <span class="r-num">2500m²</span>
+                    <span class="r-label">TOTAL AREA</span>
+                </div>
+            </div>
+            <div class="radar-item">
+                <div class="radar-circle"><div class="wave"></div></div>
+                <div class="radar-info">
+                    <span class="r-num">TOP-5</span>
+                    <span class="r-label">CIS RANKING</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="f-main-content">
+            <div class="f-hub">
+                <div class="f-logo-premium">
+                    <h2 class="f-brand-name">IRONN<span>DYNASTY</span></h2>
+                    <div class="f-ver-badge">EST. 2024 // PREMIUM ACCESS</div>
+                </div>
+                <p class="f-mission">Architecting the future of human potential. Fusing raw iron with high-end technology to forge the leaders of tomorrow.</p>
+                
+                <div class="f-contact-cluster">
+                    <a href="tel:+77001234567" class="f-contact-pills">
+                        <span class="p-text">+7 700 123 4567</span>
+                    </a>
+                    <a href="mailto:join@ironn.kz" class="f-contact-pills">
+                        <span class="p-text">JOIN@IRONN.KZ</span>
+                    </a>
+                </div>
+
+                <div class="f-social-nexus">
+                    <a href="#" class="nexus-btn"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="nexus-btn"><i class="fab fa-telegram-plane"></i></a>
+                    <a href="#" class="nexus-btn"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+
+          <div class="f-terminal">
+    <div class="t-head-refined">
+        <h4 class="t-title-refined">EXPLORE</h4>
+        <div class="t-line"></div>
+    </div>
+    <ul class="t-links-refined">
+        <li><a href="#programs-section">Programs</a></li>
+        <li><a href="#trainers-section">Elite Coaches</a></li>
+        <li><a href="#facilities-section">Facilities</a></li>
+        <li><a href="#gallery-section">Inside Look</a></li>
+        <li><a href="#reviews-section">Reviews</a></li>
+        <li><a href="#faq-section">Knowledge Base</a></li>
+    </ul>
+</div>
+            
+        </div>
+
+        <div class="f-underground">
+            <div class="f-divider-neon"></div>
+            <div class="f-bottom-wrap">
+                <div class="f-copyright-text">© 2026 IRONN DYNASTY. ALL RIGHTS RESERVED.</div>
+                <div class="f-extra-links">
+                    <a href="#">PRIVACY POLICY</a>
+                    <a href="#">TERMS OF USE</a>
+                </div>
+                <button class="f-eject-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                    <i class="fas fa-chevron-up"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@500&display=swap');
+
+        /* ПЕРЕМЕННЫЕ ПО УМОЛЧАНИЮ (ТЕМНАЯ ТЕМА) */
+        #ironn-ultimate-footer {
+            --neon: #a855f7;
+            --neon-glow: rgba(168, 85, 247, 0.4);
+            --bg-color: #020202;
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.5);
+            --card-bg: rgba(255, 255, 255, 0.02);
+            --pill-bg: rgba(255, 255, 255, 0.03);
+            --border-color: rgba(168, 85, 247, 0.2);
+            --ticker-text: #000000;
+            --map-filter: grayscale(1) invert(0.9) hue-rotate(240deg);
+            --btn-text: #000000;
+
+            background: var(--bg-color);
+            padding: 0 0 40px 0;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            transition: background 0.4s ease, color 0.4s ease;
+        }
+
+        /* ПЕРЕМЕННЫЕ ДЛЯ СВЕТЛОЙ ТЕМЫ */
+        /* Если у вас на <body> или другом родителе вешается класс light-theme */
+        :root.light-theme #ironn-ultimate-footer,
+        body.light-theme #ironn-ultimate-footer {
+            --bg-color: #ffffff;
+            --text-main: #000000;
+            --text-muted: #666666;
+            --card-bg: #f5f5f5;
+            --pill-bg: #eeeeee;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --ticker-text: #ffffff;
+            --map-filter: grayscale(1) contrast(1.2);
+            --btn-text: #ffffff;
+            --neon-glow: rgba(168, 85, 247, 0.1);
+        }
+
+        /* Фоновые слои */
+        .f-noise-layer { position: absolute; inset: 0; background: url('https://grainy-gradients.vercel.app/noise.svg'); opacity: 0.05; pointer-events: none; }
+        .f-glow-core { 
+            position: absolute; bottom: -10%; left: 50%; transform: translateX(-50%);
+            width: 70%; height: 30%; background: radial-gradient(circle, var(--neon-glow) 0%, transparent 70%);
+            filter: blur(80px); pointer-events: none;
+        }
+
+        /* Бегущая строка */
+        .f-ticker-wrap { background: var(--neon); padding: 12px 0; overflow: hidden; transform: rotate(-1.5deg) scale(1.05); margin-bottom: 80px; z-index: 5; position: relative; }
+        .f-ticker { white-space: nowrap; animation: ticker 40s linear infinite; }
+        .f-ticker span { font-family: 'Archivo Black'; font-size: 0.85rem; color: var(--ticker-text); letter-spacing: 2px; }
+        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        .f-container { max-width: 1400px; margin: 0 auto; padding: 0 5%; position: relative; z-index: 10; }
+
+        /* Радар */
+        .f-radar-grid { display: flex; justify-content: center; gap: 80px; margin-bottom: 100px; }
+        .radar-item { display: flex; align-items: center; gap: 20px; }
+        .radar-circle { width: 12px; height: 12px; background: var(--neon); border-radius: 50%; position: relative; box-shadow: 0 0 15px var(--neon); }
+        .radar-circle .wave { position: absolute; inset: -10px; border: 1px solid var(--neon); border-radius: 50%; animation: radar 2s infinite; }
+        @keyframes radar { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(2.5); opacity: 0; } }
+        .r-num { display: block; font-family: 'Archivo Black'; font-size: 1.8rem; line-height: 1; color: var(--text-main); }
+        .r-label { font-size: 0.65rem; font-weight: 800; color: var(--neon); letter-spacing: 2px; text-transform: uppercase; }
+
+        /* Основной контент */
+        .f-main-content { display: grid; grid-template-columns: 1fr 1.5fr; gap: 80px; margin-bottom: 80px; }
+        .f-brand-name { font-family: 'Archivo Black'; font-size: 3.2rem; text-transform: uppercase; margin: 0; line-height: 0.95; color: var(--text-main); }
+        .f-brand-name span { color: var(--neon); }
+        .f-ver-badge { font-family: 'JetBrains Mono'; font-size: 0.7rem; color: var(--neon); margin-top: 15px; opacity: 0.8; }
+        .f-mission { margin: 35px 0; color: var(--text-muted); line-height: 1.8; max-width: 450px; }
+
+        /* Кнопки контактов */
+        .f-contact-pills { 
+            text-decoration: none; color: var(--text-main); display: block;
+            background: var(--pill-bg); border: 1px solid var(--border-color);
+            padding: 18px 30px; border-radius: 15px; width: fit-content; transition: 0.4s; margin-bottom: 12px;
+        }
+        .f-contact-pills:hover { border-color: var(--neon); transform: translateX(10px); background: var(--card-bg); }
+        .p-text { font-family: 'Archivo Black'; font-size: 1rem; letter-spacing: 1px; }
+
+        /* Социальные сети */
+        .f-social-nexus { display: flex; gap: 15px; margin-top: 40px; }
+        .nexus-btn { 
+            width: 55px; height: 55px; border: 1px solid var(--border-color); border-radius: 15px; background: var(--pill-bg);
+            display: flex; align-items: center; justify-content: center; color: var(--text-main); font-size: 1.4rem; transition: 0.4s;
+        }
+        .nexus-btn:hover { background: var(--neon); color: var(--btn-text); transform: translateY(-5px); box-shadow: 0 10px 20px var(--neon-glow); }
+/* Обновленный заголовок блока */
+.t-head-refined {
+    margin-bottom: 35px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.t-title-refined {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 3px;
+    margin: 0;
+    color: var(--text-main);
+}
+
+.t-line {
+    flex-grow: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--neon), transparent);
+    opacity: 0.5;
+}
+
+/* Список ссылок без лишних символов */
+.t-links-refined {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.t-links-refined li {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.t-links-refined a {
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+}
+
+/* Эффект при наведении */
+.t-links-refined a::before {
+    content: '';
+    width: 0;
+    height: 2px;
+    background: var(--neon);
+    display: inline-block;
+    margin-right: 0;
+    transition: all 0.3s ease;
+}
+
+.t-links-refined a:hover {
+    color: var(--text-main);
+    padding-left: 5px;
+}
+
+.t-links-refined a:hover::before {
+    width: 15px;
+    margin-right: 12px;
+}
+
+/* Адаптив для мобилок */
+@media (max-width: 768px) {
+    .t-links-refined a {
+        font-size: 1rem;
+    }
+}
+        /* Карточки навигации */
+        .f-terminal { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 30px; padding: 40px; backdrop-filter: blur(10px); transition: 0.4s; }
+        .t-head { display: flex; align-items: center; gap: 15px; margin-bottom: 30px; }
+        .t-prefix { font-family: 'JetBrains Mono'; color: var(--neon); font-size: 0.8rem; font-weight: bold; }
+        .t-title { font-family: 'Archivo Black'; font-size: 1rem; letter-spacing: 2px; margin: 0; color: var(--text-main); }
+
+        .t-links { list-style: none; padding: 0; margin: 0; }
+        .t-links li { margin-bottom: 15px; }
+        .t-links a { text-decoration: none; color: var(--text-muted); font-weight: 700; transition: 0.3s; }
+        .t-links a span { color: var(--neon); margin-right: 10px; opacity: 0.5; }
+        .t-links a:hover { color: var(--text-main); padding-left: 10px; }
+
+        /* Карта */
+        .f-map-terminal { height: 220px; border-radius: 20px; overflow: hidden; position: relative; filter: var(--map-filter); border: 1px solid var(--border-color); transition: 0.5s; }
+        .f-map-terminal:hover { filter: none; }
+        .coord-text { position: absolute; bottom: 15px; right: 15px; font-family: 'JetBrains Mono'; font-size: 0.65rem; color: var(--btn-text); background: var(--neon); padding: 4px 10px; border-radius: 5px; z-index: 5; }
+
+        /* Нижняя часть */
+        .f-divider-neon { height: 1px; background: linear-gradient(90deg, transparent, var(--border-color), transparent); margin-bottom: 40px; }
+        .f-bottom-wrap { display: flex; justify-content: space-between; align-items: center; }
+        .f-copyright-text { font-size: 0.75rem; color: var(--text-muted); font-weight: bold; }
+        .f-extra-links { display: flex; gap: 30px; }
+        .f-extra-links a { text-decoration: none; font-size: 0.7rem; color: var(--text-muted); font-weight: 900; letter-spacing: 1px; }
+        .f-extra-links a:hover { color: var(--neon); }
+
+        .f-eject-btn { 
+            width: 55px; height: 55px; background: var(--neon); border: none; border-radius: 15px;
+            color: var(--btn-text); cursor: pointer; transition: 0.4s; font-size: 1.2rem;
+        }
+        .f-eject-btn:hover { transform: translateY(-8px); box-shadow: 0 10px 20px var(--neon-glow); }
+
+/* --- ПРЕМИАЛЬНАЯ АДАПТИВНОСТЬ (CLEAN & FIXED) --- */
+
+@media (max-width: 1200px) {
+    .f-main-content {
+        grid-template-columns: 1fr;
+        gap: 60px;
+    }
+    .f-brand-name { font-size: 2.8rem; }
+}
+
+@media (max-width: 992px) {
+    .f-terminals {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Скрываем блок статистики */
+    .f-radar-grid {
+        display: none !important;
+    }
+
+    #ironn-ultimate-footer {
+        padding-top: 40px;
+        padding-bottom: 25px;
+    }
+
+    /* Контент */
+    .f-brand-name { font-size: 2.2rem; text-align: center; }
+    .f-ver-badge { text-align: center; margin-bottom: 10px; }
+    
+    .f-mission { 
+        text-align: center; 
+        margin: 20px auto 35px; 
+        font-size: 0.95rem;
+        max-width: 90%; 
+        color: var(--text-muted);
+    }
+
+    /* Контакты */
+    .f-contact-cluster {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .f-contact-pills {
+        width: 100%;
+        max-width: 320px;
+        text-align: center;
+        justify-content: center;
+        margin-bottom: 0;
+    }
+
+    .f-social-nexus {
+        justify-content: center;
+        margin-top: 30px;
+    }
+
+    /* Терминалы */
+    .f-terminals {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        margin-top: 40px;
+    }
+
+    .f-terminal {
+        padding: 35px 25px;
+    }
+
+    .f-map-terminal {
+        height: 200px;
+    }
+
+    /* Низ */
+    .f-bottom-wrap {
+        flex-direction: column-reverse;
+        gap: 30px;
+        text-align: center;
+    }
+
+    .f-extra-links {
+        justify-content: center;
+        gap: 25px;
+    }
+
+    .f-eject-btn {
+        width: 60px;
+        height: 60px;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .f-brand-name { font-size: 1.9rem; }
+    
+    .t-title-refined {
+        font-size: 0.9rem;
+    }
+
+    .f-copyright-text {
+        font-size: 0.7rem;
+        line-height: 1.4;
+    }
+}
+    </style>
+</footer>

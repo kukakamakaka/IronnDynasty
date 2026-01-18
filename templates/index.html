@@ -1,0 +1,129 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="{% static 'fitness/images/favicon-32x32і.png' %}?v=124">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IronnDynasty</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'fitness/about.css' %}">
+    <link rel="stylesheet" href="{% static 'fitness/showcase.css' %}">
+    <link rel="stylesheet" href="{% static 'fitness/trainers.css' %}">
+
+    <script>
+        // 1. ПРЕДОТВРАЩЕНИЕ ВСПЫШКИ ТЕМЫ (Важно для всех страниц)
+        (function() {
+            const savedTheme = localStorage.getItem('user-theme');
+            if (savedTheme === 'light') {
+                document.documentElement.classList.add('light-theme');
+                // Добавляем и на body, когда он появится
+                document.addEventListener('DOMContentLoaded', () => {
+                    document.body.classList.add('light-theme');
+                });
+            }
+        })();
+
+        // 2. Логика прелоадера
+        if (sessionStorage.getItem('preloaderWasShown')) {
+            document.documentElement.classList.add('no-preloader');
+        }
+    </script>
+</head>
+<body>
+
+    <div id="main-content">
+        {% include "sections/navmenu.html" %}
+
+        <main>
+            {% include "sections/hero.html" %}
+            {% include "sections/about.html" %}
+            {% include "sections/trainers.html" %}
+            {% include "sections/franchise.html" %}
+            {% include "sections/pricing.html" %}
+            {% include "sections/gallery.html" %}
+            {% include "sections/reviews.html" %}
+            {% include "sections/faq.html" %}
+            {% include "sections/footer.html" %}
+
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.18.0/matter.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script src="{% static 'js/loader.js' %}"></script>
+    <script src="{% static 'js/about_theme.js' %}"></script>
+
+    <script>
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 50
+        });
+    </script>
+<style>
+    /* 1. Подключаем вариативные шрифты для гибкости веса */
+    @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+    :root {
+        /* Системный стек на случай сбоя интернета, чтобы не вылез Times New Roman */
+        --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        --font-heading: 'Archivo Black', sans-serif;
+    }
+
+    /* 2. Глобальные настройки рендеринга */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-font-smoothing: antialiased; /* Делает шрифт тоньше и чище на Mac */
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+    }
+
+    /* 3. Основной текст: Делаем его легким и читабельным */
+    body {
+        font-family: var(--font-main);
+        font-weight: 400; /* Стандартная толщина */
+        line-height: 1.6; /* Увеличиваем межстрочный интервал для легкости */
+        letter-spacing: -0.01em; /* Легкое сужение для современного вида */
+        color: var(--text-main);
+    }
+
+    /* 4. Заголовки: Убираем лишнюю тяжесть */
+    h1, h2, h3, h4, .title-font {
+        font-family: var(--font-heading);
+        font-weight: normal; /* Archivo Black сам по себе жирный, не делайте его bolder */
+        text-transform: uppercase;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+    }
+
+    /* 5. Ссылки и мелкие элементы */
+    a, button, span, p {
+        font-family: var(--font-main);
+    }
+
+    /* Убираем подчеркивания по умолчанию, делая UI чище */
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    /* 6. Хак для "легкости": Если текст кажется жирным, принудительно ставим 300 для Light-эффекта */
+    .text-light {
+        font-weight: 300;
+        opacity: 0.9;
+    }
+</style>
+</body>
+</html>

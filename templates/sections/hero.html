@@ -1,0 +1,508 @@
+{% load static %}
+
+<section class="hero-section">
+    <div class="hero-bg-layer dark-bg"></div>
+    <div class="hero-bg-layer light-bg"></div>
+
+    <div class="hero-overlay"></div>
+
+    <div class="hero-container" data-aos="fade-right">
+        <div class="hero-rating hide-mobile">
+            <div class="stars">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+            </div>
+            <span>4.9 Rating</span>
+        </div>
+
+        <h1 class="hero-main-title">
+            Smarter <span class="icon-inline"><i class="fas fa-dumbbell"></i></span> training <br>
+            Rapid <span class="icon-inline pulse"><i class="fas fa-wave-square"></i></span> <span class="italic-text">gains</span>
+        </h1>
+
+        <p class="hero-description">
+            Your body tells a story. We decode your <u>DNA</u>, <u>Biomarkers</u>, and <u>HRV</u>
+            to engineer workouts that push you beyond human limits.
+        </p>
+
+        <div class="hero-btns">
+            <a href="#isolated-pricing"  class="btn-main">Start Free Trial <i class="fas fa-arrow-up-right-from-square"></i></a>
+        </div>
+
+        <div class="hero-footer-info hide-mobile">
+            <div class="info-item">
+                <strong>Elite Fitness Partner</strong>
+                <p>Next-level coaching. Peak performance powered by IronDynasty intelligence.</p>
+            </div>
+            <div class="info-item">
+                <strong>Smart Ecosystem</strong>
+                <p>Advanced tracking. Inspiring spaces. The entire gym in your pocket.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* 1. БАЗОВЫЕ СТИЛИ И ФОНЫ */
+    .hero-section {
+        position: relative;
+        min-height: 100vh;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        padding: 120px 5% 60px;
+        color: var(--text);
+        overflow: hidden;
+        background-color: var(--bg-dark);
+    }
+
+    .hero-bg-layer {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-size: cover;
+        background-position: center;
+        opacity: 0;
+        transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 0;
+    }
+
+    .dark-bg { background-image: url("{% static 'fitness/images/hero-athlete.jpg' %}"); }
+    .light-bg { background-image: url("{% static 'fitness/images/hero-athlete-lightboy.jpg' %}"); }
+
+    body:not(.light-theme) .dark-bg { opacity: 1; }
+    body.light-theme .light-bg { opacity: 1; }
+
+    .hero-overlay {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: linear-gradient(90deg, var(--bg-dark) 25%, rgba(0,0,0,0) 100%);
+        z-index: 1;
+        transition: background 0.4s ease;
+    }
+
+    .hero-container { position: relative; z-index: 2; max-width: 1100px; width: 100%; }
+
+    /* 2. ТИПОГРАФИКА И UI */
+    .hero-rating { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; font-size: 0.75rem; font-weight: 600; opacity: 0.8; }
+    .stars { color: #ffcc00; font-size: 0.7rem; }
+
+    .hero-main-title {
+        font-family: var(--font-main);
+        font-weight: 700;
+        font-size: clamp(2.5rem, 6.5vw, 4.8rem);
+        line-height: 1.1; margin-bottom: 25px; letter-spacing: -2px;
+    }
+
+    .italic-text { font-style: italic; font-family: serif; font-weight: 400; }
+
+    .icon-inline {
+        display: inline-flex; align-items: center; justify-content: center;
+        background: var(--glass); border: 1px solid var(--border);
+        border-radius: 50px; padding: 0 15px; height: 50px;
+        vertical-align: middle; margin: 0 5px; backdrop-filter: blur(10px);
+    }
+
+    .pulse { animation: icon-pulse 2s infinite ease-in-out; }
+    @keyframes icon-pulse { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.1); opacity: 1; color: var(--accent); } }
+
+    .hero-description { max-width: 480px; color: var(--text-muted); font-size: 1.05rem; line-height: 1.6; margin-bottom: 40px; }
+
+    .hero-description u {
+    text-decoration: none;
+    position: relative;
+    display: inline-block;
+}
+
+.hero-description u::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--fg-accent);
+    transition: width 0.8s ease 1.2s; /* Начнется после появления всего текста */
+}
+
+.hero-section.is-visible .hero-description u::after {
+    width: 100%;
+}
+    
+    .hero-btns { margin-bottom: 120px; }
+    /* Общие стили */
+/* 1. БАЗОВЫЕ СТИЛИ (ОБЩИЕ) */
+.btn-main {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 38px;
+    border-radius: 100px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    z-index: 1;
+    border: none;
+}
+
+/* Эффект блика */
+.btn-main::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -110%;
+    width: 30%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.4);
+    transform: rotate(30deg);
+    transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.btn-main:hover::after {
+    left: 150%;
+}
+
+/* 2. ТЕМНАЯ ТЕМА (Исправляем "белое на белом") */
+body:not(.light-theme) .btn-main {
+    background-color: #7854ae !important; /* Ваш --fg-accent */
+    color: #ffffff !important;           /* Текст всегда белый */
+    box-shadow: 0 4px 20px rgba(168, 85, 247, 0.4);
+    animation: pulse-dark 2.5s infinite;
+}
+
+/* 3. СВЕТЛАЯ ТЕМА */
+body.light-theme .btn-main {
+    background-color: #7453a8 !important; /* Ваш --fg-accent (light) */
+    color: #ffffff !important;           /* Текст тоже белый для контраста */
+    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.25);
+    animation: pulse-light 2.5s infinite;
+}
+
+/* 4. ХОВЕРЫ (Общие) */
+.btn-main:hover {
+    transform: translateY(-3px) scale(1.03);
+    filter: brightness(1.1); /* Слегка подсвечиваем саму кнопку */
+}
+
+.btn-main:hover i {
+    transform: translate(3px, -3px);
+}
+
+/* 5. АНИМАЦИИ ПУЛЬСАЦИИ (Тень, а не цвет) */
+@keyframes pulse-dark {
+    0% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.6); }
+    70% { box-shadow: 0 0 0 15px rgba(168, 85, 247, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0); }
+}
+
+@keyframes pulse-light {
+    0% { box-shadow: 0 0 0 0 rgba(124, 58, 237, 0.4); }
+    70% { box-shadow: 0 0 0 15px rgba(124, 58, 237, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(124, 58, 237, 0); }
+}
+    
+   /* 1. БАЗОВЫЕ СТИЛИ С ВНУТРЕННИМ ГРАДИЕНТОМ */
+.btn-main {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 42px;
+    border-radius: 100px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1.2px;
+    color: #ffffff !important; /* Текст ВСЕГДА белый */
+    overflow: hidden;
+    z-index: 1;
+    border: none;
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    
+    /* Сложный градиент для эффекта "живой" поверхности */
+    background: linear-gradient(-45deg, #7c3aed, #a855f7, #6366f1, #a855f7);
+    background-size: 300% 300%;
+    animation: gradientFlow 5s ease infinite;
+}
+
+/* 2. ЭФФЕКТ БЛИКА (SHINE) — теперь более мягкий */
+.btn-main::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+    );
+    transition: left 0.7s ease;
+    z-index: 2;
+}
+
+.btn-main:hover::before {
+    left: 100%;
+}
+
+/* 3. СПЕЦИФИКА ТЕМ (Свечение) */
+
+/* Темная тема: Неоновое свечение на фоне #050505 */
+body:not(.light-theme) .btn-main {
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3), 
+                0 0 30px rgba(168, 85, 247, 0.1);
+}
+
+/* Светлая тема: Мягкая тень на фоне #f4f4f7 */
+body.light-theme .btn-main {
+    box-shadow: 0 10px 20px rgba(124, 58, 237, 0.2);
+}
+
+/* 4. ХОВЕР-ЭФФЕКТЫ */
+.btn-main:hover {
+    transform: translateY(-4px) scale(1.04);
+    filter: brightness(1.15);
+}
+
+/* Анимация иконки стрелки */
+.btn-main i {
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-main:hover i {
+    transform: translate(4px, -4px);
+}
+
+/* 5. КЛЮЧЕВЫЕ АНИМАЦИИ */
+
+/* Переливание градиента внутри кнопки */
+@keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Микро-пульсация для привлечения внимания (Scale) */
+.btn-main {
+    animation: gradientFlow 5s ease infinite, buttonPulse 3s infinite ease-in-out;
+}
+
+@keyframes buttonPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+/* Темная тема (Dark Theme) */
+[data-theme="dark"] .btn-main {
+    background: rgba(168, 85, 247, 0.45); /* --fg-accent с прозрачностью */
+    color: #ffffff; /* Белый текст для лучшего контраста на темном фоне */
+}
+
+/* Светлая тема (Light Theme) */
+[data-theme="light"] .btn-main {
+    background: rgba(124, 58, 237, 0.45); /* --fg-accent (более насыщенный фиолетовый) */
+    color: #1a1a1a; /* Темный текст для читабельности */
+}/* Общие стили */
+.btn-main {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 32px;
+    border-radius: 100px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.8px;
+    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* Эффект при наведении для обеих тем */
+.btn-main:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    opacity: 0.9;
+}
+
+/* Темная тема (Dark Theme) */
+[data-theme="dark"] .btn-main {
+    background: rgba(168, 85, 247, 0.45); /* --fg-accent с прозрачностью */
+    color: #ffffff; /* Белый текст для лучшего контраста на темном фоне */
+}
+
+/* Светлая тема (Light Theme) */
+[data-theme="light"] .btn-main {
+    background: rgba(124, 58, 237, 0.45); /* --fg-accent (более насыщенный фиолетовый) */
+    color: #1a1a1a; /* Темный текст для читабельности */
+}
+
+    .hero-footer-info {
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 40px; border-top: 1px solid var(--border); padding-top: 35px; max-width: 800px;
+    }
+
+/* 3. МОБИЛЬНАЯ АДАПТАЦИЯ (ПОЛНАЯ ПРАВКА) */
+
+/* 3. МОБИЛЬНАЯ АДАПТАЦИЯ */
+
+@media (max-width: 768px) {
+    /* ТОЧНОЕ СКРЫТИЕ НИЖНИХ БЛОКОВ */
+    .hero-footer-info, 
+    .hide-mobile {
+        display: none !important;
+    }
+
+    .hero-section {
+        padding-top: 80px;
+        padding-bottom: 40px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        text-align: center;
+        min-height: 100vh;
+        background-color: var(--fg-bg) !important;
+        position: relative;
+        overflow: hidden;
+        transition: background-color 0.4s ease;
+    }
+
+    .hero-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        z-index: 10;
+        padding: 0 20px 40px; /* Отступ снизу для кнопки */
+        position: relative;
+    }
+
+    /* --- ОВЕРЛЕЙ (ГРАДИЕНТ НА ФОТО) --- */
+    .hero-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        transition: background 0.4s ease;
+    }
+
+    /* Темная тема */
+    body:not(.light-theme) .hero-overlay {
+        background: linear-gradient(180deg, rgba(5,5,5,0) 0%, rgba(5,5,5,0.4) 50%, #050505 100%) !important;
+    }
+
+    /* Светлая тема */
+    body.light-theme .hero-overlay {
+        background: linear-gradient(180deg, rgba(244,244,247,0) 0%, rgba(244,244,247,0.4) 50%, #f4f4f7 100%) !important;
+    }
+
+    /* --- ТЕКСТЫ И СВЕЧЕНИЕ --- */
+
+    /* Темная тема: Белый текст + Белое свечение */
+    body:not(.light-theme) .hero-main-title,
+    body:not(.light-theme) .hero-main-title *,
+    body:not(.light-theme) .hero-description,
+    body:not(.light-theme) .hero-description * {
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+        text-shadow: 0 0 15px rgba(255, 255, 255, 0.3) !important;
+    }
+
+    /* Светлая тема: Темный текст + Темная тень */
+    body.light-theme .hero-main-title,
+    body.light-theme .hero-main-title *,
+    body.light-theme .hero-description,
+    body.light-theme .hero-description * {
+        color: #1a1a1a !important;
+        -webkit-text-fill-color: #1a1a1a !important;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .hero-main-title {
+        font-size: 2.1rem !important;
+        line-height: 1.2 !important;
+        margin-bottom: 12px !important;
+    }
+
+    .hero-description {
+        font-size: 0.85rem !important;
+        line-height: 1.5 !important;
+        margin-bottom: 25px !important;
+        max-width: 90% !important;
+    }
+
+    .hero-btns {
+        margin-bottom: 20px;
+    }
+}
+
+/* --- ЭФФЕКТ СТЫКА ВНИЗУ (ИСПРАВЛЕНИЕ ИНВЕРСИИ) --- */
+
+.hero-section::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 150px;
+    z-index: 3;
+    pointer-events: none;
+    transition: background 0.4s ease;
+}
+
+/* Темная тема: уход в ЧЕРНЫЙ (#050505) */
+body:not(.light-theme) .hero-section::after {
+    background: linear-gradient(to bottom, transparent, #050505) !important;
+}
+
+/* Светлая тема: уход в СВЕТЛЫЙ (#f4f4f7) */
+body.light-theme .hero-section::after {
+    background: linear-gradient(to bottom, transparent, #f4f4f7) !important;
+}
+
+/* Базовое состояние для анимации появления */
+.hero-container > * {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Класс, который будет запускать анимацию */
+.hero-section.is-visible .hero-container > * {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Каскадная задержка для элементов (Stagger) */
+.hero-section.is-visible .hero-rating { transition-delay: 0.1s; }
+.hero-section.is-visible .hero-main-title { transition-delay: 0.3s; }
+.hero-section.is-visible .hero-description { transition-delay: 0.5s; }
+.hero-section.is-visible .hero-btns { transition-delay: 0.7s; }
+.hero-section.is-visible .hero-footer-info { transition-delay: 0.9s; }
+
+/* Анимация фонового изображения (зум при появлении) */
+.hero-bg-layer {
+    transform: scale(1.1);
+    transition: opacity 1.2s ease, transform 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.hero-section.is-visible .hero-bg-layer {
+    transform: scale(1);
+}
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const hero = document.querySelector('.hero-section');
+    
+    // Небольшая задержка, чтобы браузер успел отрисовать стили
+    setTimeout(() => {
+        hero.classList.add('is-visible');
+    }, 100);
+});
+</script>

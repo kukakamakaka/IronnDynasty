@@ -1,0 +1,675 @@
+{% load static %}
+
+<nav class="navbar" id="mainNavbar">
+    <a href="/" class="logo">IRONN<span>DYNASTY</span></a>
+
+    <div class="nav-links">
+        <a href="#trainers-section" class="hover-underline">Trainers</a>
+        <a href="#programs-section" class="hover-underline">Program</a>
+        <a href="#facilities-section" class="hover-underline">Facilities</a>
+        <a href="#gallery-section" class="hover-underline">Gallery</a>
+        <a href="#reviews-section" class="hover-underline">Reviews</a>
+        <a href="#faq-section" class="hover-underline">FAQ</a>
+    </div>
+
+    <div class="nav-actions">
+        {% if user.is_authenticated %}
+            <a href="{% url 'dashboard' %}" class="user-profile-btn user-desktop-only">
+                <div class="avatar-container">
+                    {% if user.profile.avatar %}
+                        <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}" class="user-avatar-img">
+                    {% else %}
+                        <div class="user-avatar-placeholder">
+                            {{ user.username|slice:":1"|upper }}
+                        </div>
+                    {% endif %}
+                    <div class="online-badge"></div>
+                </div>
+                <div class="user-info-text">
+                    <span class="user-name">{{ user.username }}</span>
+                    <span class="user-status">Elite</span>
+                </div>
+            </a>
+        {% else %}
+            <a href="{% url 'register' %}" class="control-circle-btn user-desktop-only" title="Join Now">
+                <span class="join-text">Join Now</span>
+            </a>
+        {% endif %}
+
+        <button id="music-toggle" class="control-circle-btn" title="Toggle Music">
+            <div class="visualizer">
+                <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+            </div>
+        </button>
+
+        <button id="theme-toggle" class="control-circle-btn" title="Сменить тему">
+            <span class="theme-icon">☾</span>
+        </button>
+
+        <button class="control-circle-btn user-mobile-only burger-btn" id="menu-open">
+    <div class="burger-lines"><span></span><span></span><span></span></div>
+</button>
+    
+    </div>
+</nav>
+
+
+
+<div class="mobile-dropdown" id="mobile-menu">
+    <div class="dropdown-wrapper"> {% if user.is_authenticated %}
+    <a href="{% url 'dashboard' %}" class="m-profile-link">
+        <div class="m-profile-box">
+            <div class="m-avatar-container">
+                {% if user.profile.avatar %}
+                    <img src="{{ user.profile.avatar.url }}" class="m-avatar-image">
+                {% else %}
+                    <div class="m-avatar-placeholder">{{ user.username|slice:":1"|upper }}</div>
+                {% endif %}
+                <div class="m-status-ring"></div>
+            </div>
+            <h3 class="m-user-title">{{ user.username }}</h3>
+            <span class="m-user-badge">Elite Dynasty</span>
+        </div>
+    </a>
+{% endif %}
+
+        <nav class="m-navigation">
+            <a href="#trainers-section" class="m-link">Trainers</a>
+            <a href="#programs-section" class="m-link">Program</a>
+            <a href="#facilities-section" class="m-link">Facilities</a>
+            <a href="#gallery-section" class="m-link">Gallery</a>
+            <a href="#reviews-section" class="m-link">Reviews</a>
+            <a href="#faq-section" class="m-link">FAQ</a>
+
+        </nav>
+
+        {% if not user.is_authenticated %}
+            <a href="{% url 'register' %}" class="m-premium-btn">
+    <span class="shimmer"></span>
+    <span class="text">Join now</span>
+</a>
+
+        {% endif %}
+    </div>
+</div>
+
+
+<audio id="bg-music" loop preload="auto">
+    <source src="{% static 'fitness/sounds/music.mp3' %}" type="audio/mpeg">
+</audio>
+
+<style>
+:root {
+    /* Твои оригинальные настройки (Dark по умолчанию) */
+    --accent: #a855f7;
+    --text: #ffffff;
+    --text-muted: rgba(255, 255, 255, 0.5);
+    --bg-dark: #050505;
+    --card-bg: #0a0a0a;
+    --glass: rgba(255, 255, 255, 0.03);
+    --border: rgba(255, 255, 255, 0.08);
+    --blur: 12px;
+    --font-main: 'Inter', sans-serif;
+    --font-logo: 'Archivo Black', sans-serif;
+
+    /* Переменные для шиммера (из твоего нового эффекта) */
+    --glow-hue: 269deg;
+    --spring-easing: linear(0, 0.002, 0.01 0.9%, 0.038 1.8%, 0.156, 0.312 5.8%, 0.789 11.1%, 1.015 14.2%, 1.096, 1.157, 1.199, 1.224 20.3%, 1.231, 1.231, 1.226, 1.214 24.6%, 1.176 26.9%, 1.057 32.6%, 1.007 35.5%, 0.984, 0.968, 0.956, 0.949 42%, 0.946 44.1%, 0.95 46.5%, 0.998 57.2%, 1.007, 1.011 63.3%, 1.012 68.3%, 0.998 84%, 1);
+    --spring-duration: 1.33s;
+}
+
+body {
+    background-color: var(--bg-dark); /* Жесткий темный фон для всей страницы */
+    transition: background-color 0.3s ease;
+}
+
+body.light-theme {
+    /* ... твои существующие переменные ... */
+    background-color: #f4f4f7;
+    --bg-dark: #f4f4f7;
+    --card-bg: #ffffff;
+    --text: #1a1a1a;
+    --text-muted: rgba(0, 0, 0, 0.6);
+    --border: rgba(0, 0, 0, 0.08);
+    --glass: rgba(0, 0, 0, 0.04);
+}
+
+/* Дополнительные уточнения для светлой темы */
+body.light-theme .m-link { color: var(--text); }
+body.light-theme .m-user-title { color: var(--text) !important; }
+body.light-theme .m-user-badge {
+    color: var(--text-muted);
+}
+body.light-theme .dropdown-wrapper { border-color: var(--border); }
+
+
+/* --- NAVBAR BASE --- */
+.navbar {
+    position: fixed; 
+    top: 0; 
+    width: 100%; 
+    z-index: 1000;
+    display: flex; 
+    justify-content: space-between; /* Лого слева, экшены справа */
+    align-items: center;
+    padding: 1.5rem 5%; 
+    background: transparent;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: var(--font-main);
+    box-sizing: border-box; /* Важно, чтобы padding не расширял навбар за экран */
+}
+
+.navbar.scrolled {
+    padding: 0.8rem 5%; background: var(--bg-dark);
+    backdrop-filter: blur(var(--blur)); border-bottom: 1px solid var(--border);
+}
+
+.logo { font-family: var(--font-logo); font-size: 1.5rem; color: var(--text); text-decoration: none; letter-spacing: -1px; }
+.logo span { color: var(--accent); text-shadow: 0 0 15px rgba(168, 85, 247, 0.5); }
+
+/* В основном коде (десктоп) */
+.nav-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5rem; /* Добавляем расстояние между ссылками */
+    flex: 1;    /* Это заставит блок занять все свободное место в центре */
+}
+
+/* Внутри мобильного медиа-запроса */
+@media (max-width: 992px) {
+    .nav-links {
+        display: none !important; /* Скрываем десктопные ссылки на мобилках */
+    }
+}
+
+.nav-links a {
+    color: var(--text); text-decoration: none; font-size: 0.85rem;
+    text-transform: uppercase; font-weight: 600; opacity: 0.6; transition: 0.4s; position: relative;
+}
+.nav-links a:hover { opacity: 1; color: var(--accent); }
+.nav-links a::after {
+    content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px;
+    background: var(--accent); transition: width 0.3s ease; box-shadow: 0 0 10px var(--accent);
+}
+.nav-links a:hover::after { width: 100%; }
+
+/* --- ACTIONS & BUTTONS --- */
+.nav-actions { 
+    display: flex; 
+    align-items: center; 
+    gap: 1.5rem; /* Увеличили с 12px до 1.5rem для "воздуха" */
+}
+
+.control-circle-btn {
+    display: flex; align-items: center; justify-content: center;
+    background: var(--glass); border: 1px solid var(--border);
+    backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+    color: var(--text); cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    text-decoration: none; height: 48px; border-radius: 100px;
+    min-width: 48px; position: relative; overflow: hidden;
+}
+
+/* JOIN NOW (Modern UI) */
+.control-circle-btn[href*="register"] {
+    padding: 0 28px;
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), var(--glass));
+    border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.control-circle-btn[href*="register"] span {
+    font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px;
+    background: linear-gradient(to right, #fff, #d8b4fe);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+
+.control-circle-btn[href*="register"]:hover {
+    background: var(--accent); border-color: var(--accent);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 10px 25px rgba(168, 85, 247, 0.4);
+}
+.control-circle-btn[href*="register"]:hover span { -webkit-text-fill-color: #fff; }
+
+/* Круглые кнопки (Музыка, Тема, Меню) */
+.control-circle-btn:not([href]) {
+    width: 48px; padding: 0; font-size: 1.1rem;
+    background: radial-gradient(circle at top left, var(--glass), transparent);
+}
+
+.control-circle-btn:not([href]):hover {
+    background: rgba(168, 85, 247, 0.1); border-color: var(--accent); color: var(--accent);
+    transform: translateY(-2px) rotate(8deg);
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+}
+
+.control-circle-btn.active {
+    background: rgba(168, 85, 247, 0.2); border-color: var(--accent); color: var(--accent);
+    box-shadow: inset 0 0 10px rgba(168, 85, 247, 0.3);
+}
+
+/* --- 1. КНОПКА ПРОФИЛЯ (ДЕСКТОП) --- */
+.user-profile-btn {
+    display: flex; align-items: center; gap: 10px;
+    padding: 5px 16px 5px 5px; background: var(--glass);
+    border: 1px solid var(--border); border-radius: 100px;
+    text-decoration: none; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    backdrop-filter: blur(var(--blur));
+}
+
+.user-profile-btn:hover {
+    background: rgba(168, 85, 247, 0.1); border-color: var(--accent);
+    transform: translateY(-2px); box-shadow: 0 8px 20px rgba(168, 85, 247, 0.15);
+}
+
+.avatar-container { position: relative; width: 38px; height: 38px; }
+.user-avatar-img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 1px solid var(--border); }
+.user-avatar-placeholder {
+    width: 100%; height: 100%; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), #7c3aed);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 800; font-size: 0.9rem;
+}
+.online-badge {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 10px;
+    height: 10px;
+    background: #10b981;
+    border: 2px solid var(--card-bg); /* Используем цвет карточки для обводки */
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+}
+.user-info-text { display: flex; flex-direction: column; line-height: 1.1; }
+.user-name { color: var(--text); font-size: 0.85rem; font-weight: 700; }
+.user-status { color: var(--accent); font-size: 0.65rem; font-weight: 800; text-transform: uppercase; }
+
+/* --- 2. МОБИЛЬНАЯ КАРТОЧКА (OVERLAY) --- */
+
+.m-avatar-placeholder {
+    width: 100%; height: 100%; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), #7c3aed);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 1.8rem; font-weight: 900;
+}
+
+/* --- 3. VISUALIZER & ICONS --- */
+.visualizer { display: flex; align-items: flex-end; gap: 3px; height: 16px; padding-bottom: 2px; }
+.visualizer .bar { width: 3px; background: currentColor; border-radius: 10px; transition: background 0.3s ease; }
+.visualizer .bar:nth-child(1) { height: 6px; }
+.visualizer .bar:nth-child(2) { height: 12px; }
+.visualizer .bar:nth-child(3) { height: 8px; }
+
+@keyframes music-wave { 0% { height: 4px; } 50% { height: 16px; } 100% { height: 8px; } }
+.control-circle-btn.active .bar { animation: music-wave 0.6s infinite ease-in-out alternate; }
+.control-circle-btn.active .bar:nth-child(2) { animation-delay: 0.2s; }
+.control-circle-btn.active .bar:nth-child(3) { animation-delay: 0.4s; }
+
+.theme-icon { display: inline-block; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.control-circle-btn:hover .theme-icon { transform: scale(1.2) rotate(-15deg); }
+
+/* --- BURGER --- */
+.burger-lines { display: flex; flex-direction: column; gap: 4px; }
+.burger-lines span { display: block; width: 18px; height: 2px; background: currentColor; border-radius: 2px; transition: 0.3s; }
+
+
+
+@media (max-width: 992px) { .nav-links, .user-desktop-only { display: none !important; } }
+
+
+/* ================================================================
+   ELITE MOBILE DROPDOWN - FINAL COMBINED VERSION
+   ================================================================ */
+
+/* 1. Регистрация свойств (ДЛЯ КНОПКИ) */
+@property --shimmer {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 33deg;
+}
+
+/* 2. Основные контейнеры (МЕНЮ) */
+.mobile-dropdown {
+    position: fixed;
+    top: 90px;
+    right: 5%;
+    width: 280px;
+    z-index: 2000;
+    display: none;
+    perspective: 1000px;
+}
+
+.dropdown-wrapper {
+    background: var(--card-bg);
+    backdrop-filter: blur(30px) saturate(200%);
+    -webkit-backdrop-filter: blur(30px) saturate(200%);
+    border: 1px solid var(--border);
+    border-radius: 35px;
+    padding: 25px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.05);
+    opacity: 0;
+    transform: rotateX(-15deg) translateY(20px) scale(0.95);
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.mobile-dropdown.active .dropdown-wrapper {
+    opacity: 1;
+    transform: rotateX(0) translateY(0) scale(1);
+}
+
+/* 3. Профиль и Навигация (МЕНЮ) */
+.m-profile-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 25px;
+    opacity: 0;
+    transform: scale(0.9);
+    transition: all 0.5s ease 0.05s;
+}
+
+.mobile-dropdown.active .m-profile-box { opacity: 1; transform: scale(1); }
+
+.m-avatar-image {
+    width: 80px; height: 80px;
+    object-fit: cover; border-radius: 28px;
+    border: 2px solid var(--accent);
+}
+
+.m-link {
+    font-size: 1.15rem; color: var(--text-muted);
+    text-decoration: none; padding: 14px 20px;
+    display: flex; justify-content: space-between;
+    opacity: 0; transform: translateY(15px);
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.mobile-dropdown.active .m-link { opacity: 1; transform: translateY(0); }
+.mobile-dropdown.active .m-link:nth-child(1) { transition-delay: 0.1s; }
+.mobile-dropdown.active .m-link:nth-child(2) { transition-delay: 0.15s; }
+.mobile-dropdown.active .m-link:nth-child(3) { transition-delay: 0.2s; }
+
+/* 4. НОВАЯ ПРЕМИУМ КНОПКА (ТОТ САМЫЙ ШИММЕР) */
+:root {
+    --glow-hue: 269deg;
+    --spring-easing: linear(0, 0.002, 0.01 0.9%, 0.038 1.8%, 0.156, 0.312 5.8%, 0.789 11.1%, 1.015 14.2%, 1.096, 1.157, 1.199, 1.224 20.3%, 1.231, 1.231, 1.226, 1.214 24.6%, 1.176 26.9%, 1.057 32.6%, 1.007 35.5%, 0.984, 0.968, 0.956, 0.949 42%, 0.946 44.1%, 0.95 46.5%, 0.998 57.2%, 1.007, 1.011 63.3%, 1.012 68.3%, 0.998 84%, 1);
+    --spring-duration: 1.33s;
+}
+
+.m-premium-btn {
+    --inset: 40px;
+    position: relative;
+    margin-top: 20px;
+    padding: 18px;
+    background: var(--card-bg);
+    background-image: linear-gradient(315deg, #a855f7 -10%, #7c3aed 50%, #4c1d95 110%);
+    color: white;
+    text-decoration: none;
+    border-radius: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 800;
+    isolation: isolate;
+    transition: all var(--spring-duration) var(--spring-easing);
+}
+
+.m-premium-btn .shimmer {
+    position: absolute;
+    inset: calc(var(--inset) * -1);
+    border-radius: inherit;
+    mask-image: conic-gradient(from var(--shimmer, 0deg), transparent 0%, transparent 20%, black 36%, black 45%, transparent 50%, transparent 70%, black 85%, black 95%, transparent 100%);
+    animation: shimmer 1s linear infinite both;
+}
+
+.m-premium-btn .shimmer::before,
+.m-premium-btn .shimmer::after {
+    content: ""; position: absolute; inset: var(--inset);
+    opacity: 0; transition: all 0.5s ease; border-radius: inherit;
+}
+
+.m-premium-btn:hover .shimmer::before,
+.m-premium-btn:hover .shimmer::after {
+    opacity: 1; animation: shine 1.2s ease-in 1 forwards;
+}
+
+.m-premium-btn .shimmer::before {
+    box-shadow: 0 0 5px 2px hsl(var(--glow-hue) 20% 95%), 0 0 15px 4px hsl(var(--glow-hue) 50% 70%);
+    z-index: -1;
+}
+
+.m-premium-btn .text {
+    z-index: 2;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.8) 40%, white 50%, transparent 52%);
+    background-clip: text; -webkit-background-clip: text;
+    background-size: 300% 300%; background-position: center 200%;
+}
+
+.m-premium-btn:hover .text { animation: text-glow .66s ease-in 1 both; }
+.m-premium-btn:hover { transform: scale(1.05); }
+
+/* Анимации */
+@keyframes shimmer { 0% { --shimmer: 0deg; } 100% { --shimmer: 360deg; } }
+@keyframes shine { 0%, 100% { opacity: 0; } 15%, 55% { opacity: 1; } }
+@keyframes text-glow { 0% { background-position: 100% center; } 100% { background-position: -100% center; } }
+
+
+
+/* Убираем стандартные стили ссылки для профиля */
+.m-profile-link {
+    text-decoration: none;
+    display: block; /* Чтобы ссылка занимала всю область */
+    width: 100%;
+    transition: transform 0.3s ease;
+}
+
+/* Эффект при наведении на профиль */
+.m-profile-link:hover .m-avatar-image,
+.m-profile-link:hover .m-avatar-placeholder {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+    border-color: #fff;
+}
+
+.m-profile-link:hover .m-user-title {
+    color: var(--fg-accent); /* Имя пользователя немного подсветится цветом акцента */
+}
+
+/* Эффект нажатия */
+.m-profile-link:active {
+    transform: scale(0.98);
+}
+
+/* Плавный переход для элементов внутри */
+.m-avatar-image, .m-avatar-placeholder, .m-user-title {
+    transition: all 0.3s ease;
+}
+/* --- СТРОГОЕ РАЗДЕЛЕНИЕ АДАПТИВА --- */
+
+/* ПРАВИЛА ДЛЯ МОБИЛЬНЫХ (до 992px) */
+@media (max-width: 992px) {
+    /* Скрываем десктопную навигацию */
+    .nav-links, 
+    .user-profile-btn, 
+    .user-desktop-only {
+        display: none !important;
+    }
+
+    /* Показываем мобильное меню только при активации */
+    .mobile-dropdown.active {
+        display: block !important;
+    }
+}
+
+/* ПРАВИЛА ДЛЯ ДЕСКТОПА (от 993px) */
+@media (min-width: 993px) {
+    /* Принудительно скрываем мобильное меню и бургер */
+    .mobile-dropdown, 
+    .burger-btn { 
+        display: none !important; 
+    }
+    
+    /* Показываем десктопные элементы */
+    .nav-links {
+        display: flex !important;
+    }
+    .user-profile-btn {
+        display: flex !important;
+    }
+}
+/* Базовые классы видимости */
+.user-mobile-only { display: none; }
+.user-desktop-only { display: flex; }
+
+@media (max-width: 992px) {
+    .user-mobile-only { display: flex !important; }
+    .user-desktop-only { display: none !important; }
+}
+
+@media (min-width: 993px) {
+    .user-mobile-only { display: none !important; }
+    .user-desktop-only { display: flex !important; }
+}
+.logo, .nav-actions {
+    flex: 0 0 200px; /* Резервируем фиксированное место под края, чтобы центр не смещался */
+}
+
+.nav-actions {
+    justify-content: flex-end; /* Кнопки всегда прижаты к правому краю */
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const navbar = document.getElementById('mainNavbar');
+    const menuOpen = document.getElementById('menu-open');
+    const overlay = document.getElementById('mobile-menu');
+    const navItems = document.querySelectorAll('.nav-item');
+    // Обновленный селектор под твою новую структуру
+    const mobileLinks = document.querySelectorAll('.m-link');
+
+    // --- 1. Логика скролла (Navbar glass effect) ---
+    const handleScroll = () => {
+        window.scrollY > 30 ? navbar.classList.add('scrolled') : navbar.classList.remove('scrolled');
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+
+    // --- 2. Логика Dropdown меню ---
+    const toggleMenu = (isOpen) => {
+        if (isOpen && window.innerWidth > 992) return;
+        if (isOpen) {
+            overlay.style.display = 'block';
+            // Вибрация для мобилок (премиум отклик)
+            if (window.navigator && window.navigator.vibrate) window.navigator.vibrate(10);
+
+            setTimeout(() => overlay.classList.add('active'), 10);
+        } else {
+            overlay.classList.remove('active');
+            setTimeout(() => overlay.style.display = 'none', 400); // 400ms под новую анимацию
+        }
+    };
+
+    menuOpen?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isActive = overlay.classList.contains('active');
+        toggleMenu(!isActive);
+    });
+
+    // Плавный скролл при клике на ссылки в меню
+    mobileLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            const href = link.getAttribute('href');
+
+            // Если это ссылка на секцию (начинается с #)
+            if (href.startsWith('#')) {
+                e.preventDefault();
+                const targetId = href.substring(1);
+                const targetElement = document.getElementById(targetId);
+
+                if (targetElement) {
+                    toggleMenu(false); // Сначала закрываем меню
+
+                    // Мягко скроллим
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80, // -80px чтобы хедер не закрывал заголовок
+                        behavior: 'smooth'
+                    });
+                }
+            } else {
+                toggleMenu(false);
+            }
+        });
+    });
+
+    // Закрытие при клике ВНЕ меню
+    document.addEventListener('click', (e) => {
+        if (overlay.classList.contains('active') &&
+            !overlay.contains(e.target) &&
+            !menuOpen.contains(e.target)) {
+            toggleMenu(false);
+        }
+    });
+
+    // --- 3. Эффект нажатия на элементы дока (Haptic) ---
+    navItems.forEach(item => {
+        item.addEventListener('click', function() {
+            navItems.forEach(i => i.classList.remove('active'));
+            this.classList.add('active');
+            this.style.transform = 'scale(0.9)';
+            if (window.navigator && window.navigator.vibrate) window.navigator.vibrate(5);
+            setTimeout(() => this.style.transform = 'scale(1)', 150);
+        });
+    });
+
+    // --- 4. Логика Музыки ---
+    const musicBtn = document.getElementById('music-toggle');
+    const audio = document.getElementById('bg-music');
+    let isPlaying = false;
+
+    musicBtn?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (!audio) return;
+        isPlaying = !isPlaying;
+        musicBtn.classList.toggle('active', isPlaying);
+        isPlaying ? audio.play().catch(e => console.log("Blocked")) : audio.pause();
+
+        const bars = musicBtn.querySelectorAll('.bar');
+        bars.forEach(bar => bar.style.animationPlayState = isPlaying ? 'running' : 'paused');
+    });
+
+  // --- 5. Логика Темы с сохранением выбора ---
+const themeBtn = document.getElementById('theme-toggle');
+const themeIcon = themeBtn?.querySelector('.theme-icon');
+
+// Функция для установки темы
+const setTheme = (theme) => {
+    if (theme === 'light') {
+        document.body.classList.add('light-theme');
+        if (themeIcon) themeIcon.textContent = '☀';
+    } else {
+        document.body.classList.remove('light-theme');
+        if (themeIcon) themeIcon.textContent = '☾';
+    }
+    // Сохраняем выбор в localStorage
+    localStorage.setItem('user-theme', theme);
+};
+
+// Проверяем сохраненную тему при загрузке страницы
+const savedTheme = localStorage.getItem('user-theme');
+if (savedTheme) {
+    setTheme(savedTheme);
+}
+
+themeBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isLight = document.body.classList.contains('light-theme');
+    setTheme(isLight ? 'dark' : 'light');
+    
+    themeBtn.classList.add('active');
+    setTimeout(() => themeBtn.classList.remove('active'), 400);
+});
+});
+</script>
+
+

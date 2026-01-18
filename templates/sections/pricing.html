@@ -1,0 +1,367 @@
+<section id="isolated-pricing" class="pricing-dashboard-unique">
+    <div id="silk-canvas-isolated"></div>
+    <div class="silk-overlay-unique"></div>
+
+    <div class="pricing-content">
+        <div class="pricing-header-unique">
+            <h2>The future of building, <br><span>priced simply</span></h2>
+            <p>Start free, scale as you grow. No hidden fees.</p>
+        </div>
+
+        <div class="pricing-grid-unique">
+            {% for plan in plans %}
+            <div class="price-card-unique {% if plan.is_featured %}featured-unique{% endif %}" data-reveal>
+                <div class="card-glow"></div>
+
+                {% if plan.is_featured %}
+                <div class="badge-unique">Most Popular</div>
+                {% endif %}
+
+                <span class="plan-name">{{ plan.title }}</span>
+                <div class="plan-price">${{ plan.price }} <span>/per month</span></div>
+                <p class="plan-desc">{{ plan.description }}</p>
+
+                {% if not user.is_authenticated %}
+    <a href="{% url 'register' %}" 
+   class="btn-unique {% if plan.is_featured %}btn-primary-unique{% else %}btn-outline-unique{% endif %}" 
+   style="text-decoration: none; display: flex; align-items: center; justify-content: center; text-align: center;">
+    <span>Join to Select Plan</span>
+</a>
+
+{% elif profile.role == 'TRAINER' %}
+    <button class="btn-unique btn-outline-unique" style="opacity: 0.5; cursor: not-allowed;" disabled>
+        <span>Plan for Athletes</span>
+    </button>
+
+{% else %}
+    <form action="{% url 'checkout' plan.id %}" method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn-unique {% if plan.is_featured %}btn-primary-unique{% else %}btn-outline-unique{% endif %}">
+            <span>{% if profile.active_plan == plan %}Current Plan{% else %}Get Started{% endif %}</span>
+        </button>
+    </form>
+{% endif %}
+
+                <ul class="features-list-unique">
+                    {% for feature in plan.features.all %}
+                    <li><i class="fas fa-check"></i> {{ feature.name }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endfor %}
+        </div>
+        </div>
+</section>
+
+<style>
+    
+    
+    
+   /* БАЗОВЫЕ НАСТРОЙКИ СЕКЦИИ */
+.pricing-dashboard-unique {
+    position: relative;
+    width: 100%;
+    
+    /* 1. ВЫСОТА СТРАНИЦЫ: 
+       измените на 80vh (короче) или на конкретные пиксели, например 800px */
+    min-height: 70vh; 
+
+    /* 2. ОТСТУП ОТ СЕКЦИИ ВЫШЕ: 
+       отрицательный margin-top поможет "наехать" на верхнюю секцию для бесшовности,
+       положительный — создаст пустую дистанцию. */
+    margin-top: 0px; 
+
+    /* Внутренние отступы (чтобы карточки не прилипали к краям) */
+    padding: 120px 0; 
+    
+    background-color: #030014;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+}
+
+    /* СТИЛИ ВАШЕГО ФОНА (НЕ ТРОГАЕМ) */
+    #silk-canvas-isolated {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    .silk-overlay-unique {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at center, transparent 0%, rgba(3, 0, 20, 0.7) 100%);
+        z-index: 2;
+        pointer-events: none;
+    }
+
+    /* КОНТЕНТ */
+    .pricing-content {
+        position: relative;
+        z-index: 5;
+        max-width: 1200px;
+        width: 90%;
+    }
+
+    .pricing-header-unique {
+        text-align: center;
+        margin-bottom: 60px;
+        color: #fff;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.8s forwards;
+    }
+
+    .pricing-header-unique h2 { font-size: 3.5rem; font-weight: 800; margin: 0; line-height: 1.1; }
+    .pricing-header-unique h2 span { color: rgba(255,255,255,0.3); }
+
+    .pricing-grid-unique {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+    }
+
+    /* УЛУЧШЕННЫЕ КАРТОЧКИ */
+    .price-card-unique {
+        position: relative;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 32px;
+        padding: 40px;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        color: #fff;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        opacity: 0; /* Для анимации появления */
+        overflow: hidden;
+    }
+
+    /* Эффект фона под курсором внутри карточки */
+    .card-glow {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle 250px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(168, 85, 247, 0.15), transparent 80%);
+        opacity: 0;
+        transition: opacity 0.3s;
+        pointer-events: none;
+    }
+
+    .price-card-unique:hover .card-glow { opacity: 1; }
+
+    .price-card-unique:hover {
+        transform: translateY(-10px);
+        border-color: rgba(168, 85, 247, 0.4);
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .featured-unique {
+        border-color: rgba(168, 85, 247, 0.5);
+        box-shadow: 0 0 40px rgba(168, 85, 247, 0.15);
+    }
+
+    .badge-unique {
+        position: absolute; top: 20px; right: 20px;
+        background: #a855f7; color: #fff; font-size: 10px; padding: 6px 14px; border-radius: 20px;
+        font-weight: 700; text-transform: uppercase;
+    }
+
+    .plan-price { font-size: 3rem; font-weight: 800; margin: 15px 0; }
+    .plan-price span { font-size: 1rem; color: rgba(255,255,255,0.4); }
+
+    /* КНОПКИ */
+    .btn-unique {
+        position: relative;
+        width: 100%; padding: 16px; border-radius: 14px; border: none; font-weight: 700; cursor: pointer; margin: 25px 0;
+        transition: 0.3s; overflow: hidden;
+    }
+
+    .btn-primary-unique { background: #a855f7; color: #fff; }
+    .btn-primary-unique:hover { background: #9333ea; box-shadow: 0 0 20px rgba(168, 85, 247, 0.4); }
+
+    .btn-outline-unique { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; }
+    .btn-outline-unique:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); }
+
+    .features-list-unique { list-style: none; padding: 0; }
+    .features-list-unique li { margin-bottom: 15px; display: flex; align-items: center; gap: 12px; font-size: 0.95rem; color: rgba(255,255,255,0.6); }
+    .features-list-unique i { color: #a855f7; }
+
+    /* АНИМАЦИИ */
+    @keyframes fadeInUp {
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .visible {
+        animation: fadeInUp 0.8s ease forwards;
+    }
+    
+    
+/* ЕДИНЫЙ БЛОК АДАПТИВА — ИСПРАВЛЕННЫЙ */
+@media (max-width: 768px) {
+    .pricing-dashboard-unique {
+        padding: 60px 0;
+        min-height: auto;
+        margin-top: -1px; 
+        display: block;
+        /* Убираем обрезку, если она была на родителе */
+        overflow: visible; 
+    }
+
+    /* Исправление "невидимой границы": расширяем контент на весь экран */
+    .pricing-content {
+        width: 100% !important;
+        max-width: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    #silk-canvas-isolated {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%; 
+        -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+        mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+    }
+
+    .pricing-header-unique {
+        margin-bottom: 40px;
+        padding: 0 20px; /* Отступы только для текста */
+    }
+
+    .pricing-header-unique h2 {
+        font-size: 2.2rem;
+    }
+
+    /* Настройка горизонтального свайпа без границ */
+    .pricing-grid-unique {
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch; 
+        scroll-snap-type: x mandatory;
+        gap: 20px;
+        /* Важно: padding-right дает место последней карточке, 
+           чтобы она не прилипала к правому краю экрана */
+        padding: 20px 25px 40px 25px; 
+        scrollbar-width: none; 
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .pricing-grid-unique::-webkit-scrollbar {
+        display: none;
+    }
+
+    .price-card-unique {
+        flex: 0 0 85%; /* 85% ширины экрана, чтобы была видна следующая */
+        min-width: 280px;
+        scroll-snap-align: center;
+        
+        /* Сброс стилей для работы JS (Intersection Observer) */
+        opacity: 0; 
+        transform: translateY(20px);
+        margin: 0; 
+    }
+
+    .featured-unique {
+        border: 2px solid rgba(168, 85, 247, 0.6);
+        box-shadow: 0 10px 30px rgba(168, 85, 247, 0.2);
+    }
+}
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<script>
+(function() {
+    const container = document.getElementById('silk-canvas-isolated');
+    const section = document.getElementById('isolated-pricing');
+    const scene = new THREE.Scene();
+    const camera = new THREE.Camera();
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+
+    let lastWidth = window.innerWidth; // Добавьте эту переменную в начало скрипта
+
+function resize() {
+    // Если ширина не изменилась (а изменилась только высота из-за скрытия бара в браузере), 
+    // мы не сбрасываем канвас, чтобы избежать мерцания.
+    if (window.innerWidth === lastWidth && window.innerWidth < 768) return;
+    
+    lastWidth = window.innerWidth;
+    const w = section.clientWidth;
+    const h = section.clientHeight; 
+    renderer.setSize(w, h);
+}
+
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Ограничим для производительности
+    container.appendChild(renderer.domElement);
+    resize();
+
+    const uniforms = {
+        uTime: { value: 0 },
+        uColor: { value: new THREE.Color("#2a1b4d") }
+    };
+
+    const material = new THREE.ShaderMaterial({
+        uniforms: uniforms,
+        vertexShader: `varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position, 1.0); }`,
+        fragmentShader: `
+            varying vec2 vUv;
+            uniform float uTime;
+            uniform vec3 uColor;
+            void main() {
+                vec2 uv = vUv;
+                float t = uTime * 0.15;
+                float pattern = 0.5 + 0.5 * sin(8.0 * (uv.x + uv.y + 0.3 * sin(4.0 * uv.x + t) + 0.2 * t));
+                pattern += 0.2 * sin(15.0 * (uv.x - uv.y + 0.1 * cos(6.0 * uv.y + t)));
+                gl_FragColor = vec4(uColor * pattern, 1.0);
+            }
+        `
+    });
+
+    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material);
+    scene.add(mesh);
+
+    function animate() {
+        requestAnimationFrame(animate);
+        uniforms.uTime.value += 0.05;
+        renderer.render(scene, camera);
+    }
+
+    window.addEventListener('resize', resize);
+    animate();
+
+    // Spotlight: Отключаем на тач-устройствах для плавности
+    const cards = document.querySelectorAll('.price-card-unique');
+    if (window.matchMedia("(pointer: fine)").matches) {
+        section.addEventListener('mousemove', (e) => {
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+                card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+            });
+        });
+    }
+
+    // Появление: Исправляем проблему невидимых карточек на мобилках
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                // Добавляем небольшую задержку только для десктопа
+                const delay = window.innerWidth > 768 ? index * 200 : 0;
+                setTimeout(() => {
+                    entry.target.classList.add('visible');
+                }, delay);
+            }
+        });
+    }, { threshold: 0.05 }); // Уменьшили порог для мобилок
+
+    document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
+})();
+</script>
+

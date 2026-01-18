@@ -1,0 +1,183 @@
+/* --- ОФОРМЛЕНИЕ ШРИФТОВ --- */
+/* Применяем Archivo Black ко всем важным заголовкам */
+.empire-title, .marquee-track span, .modern-badge {
+    font-family: 'Archivo Black', sans-serif;
+}
+
+/* Применяем Inter к описаниям */
+.empire-description {
+    font-family: 'Inter', sans-serif;
+}
+
+/* --- ОСНОВНАЯ СЕКЦИЯ ABOUT --- */
+.body-empire-section {
+    position: relative;
+    padding: 120px 0 0 0;
+    background-color: var(--bg-black);
+    color: var(--text-main);
+    text-align: center;
+    overflow: hidden;
+    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+}
+
+/* Эффект свечения на фоне */
+.ambient-glow {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%; height: 100%;
+    background: radial-gradient(circle at center, var(--accent-glow) 0%, transparent 70%);
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Сетка */
+.grid-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image:
+        linear-gradient(var(--text-main) 0.5px, transparent 0.5px),
+        linear-gradient(90deg, var(--text-main) 0.5px, transparent 0.5px);
+    background-size: 50px 50px;
+    opacity: 0.05;
+    mask-image: radial-gradient(circle at center, black, transparent 80%);
+    -webkit-mask-image: radial-gradient(circle at center, black, transparent 80%);
+    z-index: 1;
+    transition: opacity 1s ease, transform 0.1s ease-out;
+}
+
+/* --- КОНТЕНТ --- */
+.empire-content {
+    position: relative;
+    z-index: 2;
+    padding: 0 20px 120px;
+    opacity: 0;
+    transform: translateY(60px) scale(0.96);
+    filter: blur(15px);
+    transition: all 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.empire-content.is-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+}
+
+/* ГЛАВНЫЙ ЗАГОЛОВОК */
+.empire-title {
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    font-weight: normal;       /* Для Archivo Black не нужно 900, он сам массивный */
+    font-style: italic;        /* Наклон для динамики */
+    text-transform: uppercase;
+    line-height: 0.95;         /* Плотный интервал */
+    margin-bottom: 25px;
+    letter-spacing: -2px;      /* Сжатие букв */
+}
+
+/* Вторая строка заголовка (span) */
+.empire-title span {
+    display: block;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--text-dim); /* Контурный эффект как в Franchise */
+    opacity: 0.7;
+    margin-top: 5px;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #a380ff, var(--accent-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* ОПИСАНИЕ */
+.empire-description {
+    font-size: 1.1rem;
+    color: var(--text-dim);
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+    font-weight: 300; /* Облегченный Inter для контраста с жирным заголовком */
+}
+
+/* БЕЙДЖ (Стиль как в Franchise) */
+.modern-badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 4px;
+    background: transparent;
+    border: 1px solid var(--accent-purple);
+    color: var(--accent-purple);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    font-style: italic;
+}
+
+.decor-line {
+    width: 1px; height: 50px;
+    background: linear-gradient(to bottom, var(--accent-purple), transparent);
+    margin: 30px auto 0;
+}
+
+/* --- БЕГУЩАЯ СТРОКА (MARQUEE) --- */
+.marquee-divider {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--bg-black);
+    padding: 15px 0;
+    border-top: 1px solid var(--glass-border);
+    border-bottom: 1px solid var(--glass-border);
+    overflow: hidden;
+    z-index: 10;
+}
+
+.marquee-track {
+    display: flex;
+    width: max-content;
+    white-space: nowrap;
+    animation: marquee-infinite 20s linear infinite;
+    will-change: transform;
+}
+
+.marquee-track span {
+    display: inline-block;
+    font-size: 0.9rem;
+    font-style: italic;
+    text-transform: uppercase;
+    color: var(--text-main);
+    letter-spacing: 3px;
+    padding-right: 80px;
+    opacity: 0.4;
+}
+
+@keyframes marquee-infinite {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* Виньетка (тени) по бокам строки */
+.marquee-divider::before,
+.marquee-divider::after {
+    content: '';
+    position: absolute;
+    top: 0; width: 150px; height: 100%;
+    z-index: 2;
+    pointer-events: none;
+}
+.marquee-divider::before { left: 0; background: linear-gradient(to right, var(--bg-black), transparent); }
+.marquee-divider::after { right: 0; background: linear-gradient(to left, var(--bg-black), transparent); }
+
+/* Адаптация для мобильных */
+@media (max-width: 768px) {
+    .body-empire-section { padding-top: 80px; }
+    .empire-content { padding-bottom: 80px; }
+    .empire-title {
+        font-size: 2.2rem;
+        letter-spacing: -1px;
+    }
+    .marquee-track span { font-size: 0.75rem; }
+}
